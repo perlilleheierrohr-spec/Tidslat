@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14121f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tidslåt">
+<title>Tidslåt – spiller</title>
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+  :root{--bg:#14121f;--panel:#1f1c2e;--ink:#fff;--muted:#a9a6bd;--accent:#dc3389}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  body{display:flex;flex-direction:column;min-height:100%;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .stripes{display:flex;height:6px}
+  .stripes i{flex:1}
+  header{text-align:center;padding:18px 16px 4px}
+  header h1{margin:0;font-size:28px;letter-spacing:.06em;font-weight:800}
+  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:12px 20px}
+  .card-no{font-size:15px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;min-height:20px}
+  .card-no b{color:var(--ink);font-size:22px;letter-spacing:0}
+  .disc{position:relative;width:min(72vw,300px);aspect-ratio:1;border-radius:50%;border:none;padding:0;cursor:pointer;
+    background:repeating-radial-gradient(circle at center,#111 0 2px,#1d1d1d 2px 4px);
+    box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 0 0 2px #2a2a2a}
+  .disc .label{position:absolute;inset:32%;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;transition:background .3s}
+  .disc .label svg{width:42%;height:42%;fill:#fff}
+  .disc.spin{animation:spin 2.4s linear infinite}
+  .disc.spin .label svg{animation:spin 2.4s linear infinite reverse}
+  .disc:disabled{opacity:.45;cursor:default}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .status{min-height:22px;color:var(--muted);font-size:15px;text-align:center;max-width:320px}
+  .bar{width:min(80vw,320px);height:6px;border-radius:3px;background:#2a2740;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+  .btn{appearance:none;border:none;border-radius:14px;padding:15px 22px;font-size:17px;font-weight:700;color:#fff;background:var(--panel);cursor:pointer;min-width:220px}
+  .btn.primary{background:#fff;color:var(--bg)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .opts{display:flex;flex-direction:column;gap:10px;background:var(--panel);border-radius:14px;padding:14px 16px;width:min(88vw,340px)}
+  .opt{display:flex;justify-content:space-between;align-items:center;font-size:15px}
+  .opt select{font-size:15px;background:#2a2740;color:#fff;border:none;border-radius:8px;padding:6px 8px}
+  .switch{position:relative;width:48px;height:28px}
+  .switch input{opacity:0;width:0;height:0}
+  .switch span{position:absolute;inset:0;border-radius:14px;background:#3a3654;transition:.2s}
+  .switch span:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}
+  .switch input:checked+span{background:var(--accent)}
+  .switch input:checked+span:before{transform:translateX(20px)}
+  footer{text-align:center;color:#6f6c85;font-size:12px;padding:10px 16px 16px}
+  /* scanner */
+  #scan{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10}
+  #scan.on{display:flex}
+  #scan video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+  #scan .frame{position:relative;width:min(70vw,280px);aspect-ratio:1;border-radius:22px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border:3px solid #fff}
+  #scan .hint{position:relative;margin-top:22px;font-size:16px;font-weight:600;text-shadow:0 1px 4px #000}
+  #scan .close{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%)}
+  /* the YouTube player exists but is never shown */
+  #yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="stripes"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
+<header>
+  <h1>TIDSLÅT</h1>
+  <p>Skann et kort – lytt – gjett</p>
+</header>
+<main>
+  <div class="card-no" id="cardNo">Ingen kort valgt</div>
+  <button class="disc" id="disc" disabled aria-label="Spill av / pause">
+    <span class="label"><svg id="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+  </button>
+  <div class="bar"><i id="prog"></i></div>
+  <div class="status" id="status">Trykk «Skann kort» og hold QR-koden foran kameraet.</div>
+  <div class="row">
+    <button class="btn primary" id="scanBtn">📷 Skann kort</button>
+  </div>
+  <div class="opts">
+    <label class="opt">Start et tilfeldig sted
+      <span class="switch"><input type="checkbox" id="optRandom"><span></span></span>
+    </label>
+    <div class="opt">Spill i
+      <select id="optLen">
+        <option value="20">20 sek</option>
+        <option value="30" selected>30 sek</option>
+        <option value="60">60 sek</option>
+        <option value="0">hele låta</option>
+      </select>
+    </div>
+  </div>
+</main>
+<footer>Titler vises aldri her – fasiten står på baksiden av kortet.</footer>
+
+<div id="scan">
+  <video id="video" playsinline muted></video>
+  <div class="frame"></div>
+  <div class="hint">Hold QR-koden inni rammen</div>
+  <button class="btn close" id="closeScan">Avbryt</button>
+</div>
+<div id="yt-wrap"><div id="yt"></div></div>
+<canvas id="canvas" hidden></canvas>
+
+<script src="jsQR.js"></script>
+<script>
+// Card number -> YouTube video id. No titles or artists are stored on this page.
+const CARDS = {"1": "Uf4rxCB4lys", "2": "ZgdufzXvjqw", "3": "nrigbqKUWtk", "4": "gj0Rz-uP4Mk", "5": "_DGATUBGzYo", "6": "9iayJ8u4Qew", "7": "WGoDaYjdfSg", "8": "MMFj8uDubsE", "9": "VtXl8xAPAtA", "10": "QkF3oxziUI4", "11": "fJ9rUzIMcZQ", "12": "aBKEt3MhNMM", "13": "xFrGuyw1V8s", "14": "yqrAPOZxgzU", "15": "9jK-NcRmVcw", "16": "djV11Xbc914", "17": "Zi_XLOBDo_Y", "18": "b_rIk8yKDGI", "19": "182f6dTagkU", "20": "rog8ou-ZepE", "21": "hTWKbfoikeg", "22": "4fndeDfaWCg", "23": "gJLIiF15wjQ", "24": "bx1Bh8ZvH84", "25": "CduA0TULnow", "26": "Co0tTeuUVhU", "27": "IcrbM1l_BoI", "28": "nfWlot6h_JM", "29": "A_MjCqQoLLA", "30": "siO6dkqidc4", "31": "EzU0ofo3jOs", "32": "_ydMlTassYc", "33": "SR6iYWJxHqs", "34": "BkFBGDz2rrk"};
+
+const $ = id => document.getElementById(id);
+const disc = $('disc'), statusEl = $('status'), prog = $('prog'), icon = $('icon');
+const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+let player = null, ready = false, current = null, pendingId = null;
+let clipStart = 0, seeked = false, tick = null;
+
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('tidslat.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
+  set(k, v){ try{ localStorage.setItem('tidslat.'+k, JSON.stringify(v)); }catch(e){} }
+};
+$('optRandom').checked = store.get('random', false);
+$('optLen').value = String(store.get('len', 30));
+$('optRandom').onchange = e => store.set('random', e.target.checked);
+$('optLen').onchange = e => store.set('len', +e.target.value);
+
+function setStatus(t){ statusEl.textContent = t; }
+function setPlaying(on){ icon.innerHTML = on ? PAUSE : PLAY; disc.classList.toggle('spin', on); }
+
+// ---------- YouTube (hidden) ----------
+const tag = document.createElement('script');
+tag.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(tag);
+setTimeout(() => { if (!ready) setStatus('Får ikke kontakt med YouTube. Sjekk nettet og last siden på nytt.'); }, 12000);
+window.onYouTubeIframeAPIReady = () => {
+  player = new YT.Player('yt', {
+    width: 1, height: 1,
+    playerVars: { playsinline: 1, controls: 0, disablekb: 1, rel: 0, fs: 0, iv_load_policy: 3 },
+    events: {
+      onReady: () => { ready = true; player.unMute(); player.setVolume(100); if (pendingId) cue(pendingId); },
+      onStateChange: onState,
+      onError: e => {
+        setPlaying(false);
+        setStatus('Denne låta kan ikke spilles her (feil ' + e.data + '). Prøv et annet kort.');
+      }
+    }
+  });
+};
+
+function cue(id){
+  if (!ready) { pendingId = id; setStatus('Laster spilleren …'); return; }
+  pendingId = null; seeked = false; clipStart = 0; prog.style.width = '0';
+  player.cueVideoById(id);
+  disc.disabled = false;
+  setStatus('Klar! Trykk på platen for å spille.');
+  try { player.playVideo(); } catch(e) {}   // starts by itself where the browser allows it
+}
+
+function onState(e){
+  const S = YT.PlayerState;
+  if (e.data === S.PLAYING) {
+    if (!seeked) {
+      seeked = true;
+      const dur = player.getDuration() || 0;
+      if ($('optRandom').checked && dur > 60) {
+        const t = Math.floor(dur * (0.15 + Math.random() * 0.45));
+        player.seekTo(t, true); clipStart = t;
+      } else clipStart = player.getCurrentTime() || 0;
+    }
+    setPlaying(true); setStatus('Lytt … hva er det?'); startTick();
+  } else if (e.data === S.PAUSED || e.data === S.ENDED || e.data === S.CUED) {
+    setPlaying(false); stopTick();
+    if (e.data === S.ENDED) setStatus('Ferdig! Snu kortet og sjekk fasiten.');
+  } else if (e.data === S.BUFFERING) {
+    setStatus('Laster …');
+  }
+}
+
+function startTick(){
+  stopTick();
+  tick = setInterval(() => {
+    const len = +$('optLen').value;
+    const now = player.getCurrentTime ? player.getCurrentTime() : 0;
+    const dur = player.getDuration ? player.getDuration() : 0;
+    const played = Math.max(0, now - clipStart);
+    if (len > 0) {
+      prog.style.width = Math.min(100, played / len * 100) + '%';
+      if (played >= len) { player.pauseVideo(); setStatus('Tiden er ute! Gjett – og snu kortet.'); }
+    } else if (dur) prog.style.width = Math.min(100, now / dur * 100) + '%';
+  }, 250);
+}
+function stopTick(){ if (tick) clearInterval(tick); tick = null; }
+
+disc.onclick = () => {
+  if (!player || !current) return;
+  const st = player.getPlayerState();
+  if (st === YT.PlayerState.PLAYING) player.pauseVideo();
+  else {
+    const len = +$('optLen').value;
+    if (len > 0 && seeked && (player.getCurrentTime() - clipStart) >= len) {
+      player.seekTo(clipStart, true); prog.style.width = '0';
+    }
+    player.playVideo();
+  }
+};
+
+// ---------- which card? ----------
+function loadCard(n){
+  const id = CARDS[n];
+  if (!id) { setStatus('Fant ikke kort #' + n + '.'); return; }
+  current = n;
+  $('cardNo').innerHTML = 'Kort <b>#' + String(n).padStart(2, '0') + '</b>';
+  cue(id);
+}
+function parseCode(text){
+  text = (text || '').trim();
+  let m = text.match(/#(\d{1,3})\s*$/) || text.match(/[?&]k=(\d{1,3})/);
+  if (m) return { card: +m[1] };
+  m = text.match(/(?:youtu\.be\/|[?&]v=)([\w-]{11})/);          // older cards with YouTube codes
+  if (m) { const n = Object.keys(CARDS).find(k => CARDS[k] === m[1]); return n ? { card: +n } : null; }
+  return null;
+}
+function fromHash(){
+  const m = location.hash.match(/^#(\d{1,3})$/);
+  if (m) loadCard(+m[1]);
+}
+window.addEventListener('hashchange', fromHash);
+fromHash();
+
+// ---------- scanner (camera stays on this page) ----------
+const video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d', { willReadFrequently: true });
+let stream = null, raf = null;
+$('scanBtn').onclick = async () => {
+  try { if (player && player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo(); } catch(e) {}
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+  } catch (e) {
+    setStatus('Fikk ikke tilgang til kameraet. Tillat kamera for siden i innstillingene og prøv igjen.');
+    return;
+  }
+  video.srcObject = stream; await video.play();
+  $('scan').classList.add('on');
+  scanLoop();
+};
+$('closeScan').onclick = stopScan;
+function stopScan(){
+  $('scan').classList.remove('on');
+  if (raf) cancelAnimationFrame(raf); raf = null;
+  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
+}
+function scanLoop(){
+  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    const w = video.videoWidth, h = video.videoHeight, s = Math.min(1, 640 / Math.max(w, h));
+    canvas.width = w * s; canvas.height = h * s;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+    if (code) {
+      const r = parseCode(code.data);
+      if (r) {
+        stopScan();
+        if (navigator.vibrate) navigator.vibrate(60);
+        if (location.hash !== '#' + r.card) history.replaceState(null, '', '#' + r.card);
+        loadCard(r.card);
+        return;
+      }
+    }
+  }
+  raf = requestAnimationFrame(scanLoop);
+}
+</script>
+</body>
+</html>
