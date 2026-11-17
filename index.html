@@ -3,133 +3,288 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14121f">
+<meta name="theme-color" content="#2339d6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tidslåt">
-<title>Tidslåt – spiller</title>
+<title>Tidslåt</title>
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="preload" href="bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  :root{--bg:#14121f;--panel:#1f1c2e;--ink:#fff;--muted:#a9a6bd;--accent:#dc3389}
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  body{display:flex;flex-direction:column;min-height:100%;
-    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-  .stripes{display:flex;height:6px}
-  .stripes i{flex:1}
-  header{text-align:center;padding:18px 16px 4px}
-  header h1{margin:0;font-size:28px;letter-spacing:.06em;font-weight:800}
-  header p{margin:4px 0 0;color:var(--muted);font-size:13px}
-  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:12px 20px}
-  .card-no{font-size:15px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;min-height:20px}
-  .card-no b{color:var(--ink);font-size:22px;letter-spacing:0}
-  .disc{position:relative;width:min(72vw,300px);aspect-ratio:1;border-radius:50%;border:none;padding:0;cursor:pointer;
-    background:repeating-radial-gradient(circle at center,#111 0 2px,#1d1d1d 2px 4px);
-    box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 0 0 2px #2a2a2a}
-  .disc .label{position:absolute;inset:32%;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;transition:background .3s}
-  .disc .label svg{width:42%;height:42%;fill:#fff}
-  .disc.spin{animation:spin 2.4s linear infinite}
-  .disc.spin .label svg{animation:spin 2.4s linear infinite reverse}
-  .disc:disabled{opacity:.45;cursor:default}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .status{min-height:22px;color:var(--muted);font-size:15px;text-align:center;max-width:320px}
-  .bar{width:min(80vw,320px);height:6px;border-radius:3px;background:#2a2740;overflow:hidden}
-  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
-  .btn{appearance:none;border:none;border-radius:14px;padding:15px 22px;font-size:17px;font-weight:700;color:#fff;background:var(--panel);cursor:pointer;min-width:220px}
-  .btn.primary{background:#fff;color:var(--bg)}
-  .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-  .opts{display:flex;flex-direction:column;gap:10px;background:var(--panel);border-radius:14px;padding:14px 16px;width:min(88vw,340px)}
-  .opt{display:flex;justify-content:space-between;align-items:center;font-size:15px}
-  .opt select{font-size:15px;background:#2a2740;color:#fff;border:none;border-radius:8px;padding:6px 8px}
-  .switch{position:relative;width:48px;height:28px}
-  .switch input{opacity:0;width:0;height:0}
-  .switch span{position:absolute;inset:0;border-radius:14px;background:#3a3654;transition:.2s}
-  .switch span:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s}
-  .switch input:checked+span{background:var(--accent)}
-  .switch input:checked+span:before{transform:translateX(20px)}
-  footer{text-align:center;color:#6f6c85;font-size:12px;padding:10px 16px 16px}
-  /* scanner */
-  #scan{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10}
-  #scan.on{display:flex}
-  #scan video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-  #scan .frame{position:relative;width:min(70vw,280px);aspect-ratio:1;border-radius:22px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);border:3px solid #fff}
-  #scan .hint{position:relative;margin-top:22px;font-size:16px;font-weight:600;text-shadow:0 1px 4px #000}
-  #scan .close{position:absolute;bottom:calc(30px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%)}
-  /* the YouTube player exists but is never shown */
-  #yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+@font-face{
+  font-family:"Bricolage";
+  src:url(bricolage.woff2) format("woff2-variations");
+  font-weight:200 800; font-stretch:75% 100%; font-display:swap;
+}
+:root{
+  --cobalt:#2339d6;
+  --deep:#16228f;
+  --mustard:#f4b400;
+  --paper:#f3f3ee;
+  --vinyl:#0b0b10;
+  --D:min(80vw, 50svh, 430px);          /* record diameter */
+  font-family:"Bricolage",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--cobalt);color:#fff;overflow:hidden;touch-action:manipulation}
+body{display:flex;flex-direction:column;min-height:100svh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:3px solid var(--mustard);outline-offset:3px}
+
+/* ---------- header ---------- */
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 0;position:relative;z-index:5}
+.mark{font-weight:800;font-stretch:75%;font-size:30px;letter-spacing:-.01em;line-height:1}
+.gear{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--deep);transition:transform .25s}
+.gear:active{transform:scale(.92)}
+.gear svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* ---------- layout ---------- */
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,3.4svh,32px);padding:0 22px 22px}
+.stage{position:relative;width:var(--D);height:var(--D);transform:translateX(calc(var(--D) * -.04));margin-top:calc(var(--D) * .08)}
+
+/* sound rings: only alive while a song plays */
+.rings i{position:absolute;inset:-1%;border-radius:50%;border:2px solid rgba(255,255,255,.28);opacity:0;pointer-events:none}
+.stage.on .rings i{animation:ring 3.3s cubic-bezier(.2,.5,.3,1) infinite}
+.stage.on .rings i:nth-child(2){animation-delay:1.1s}
+.stage.on .rings i:nth-child(3){animation-delay:2.2s}
+@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.55);opacity:0}}
+
+.shadow{position:absolute;inset:4% -2% -6% 2%;border-radius:50%;background:var(--deep);filter:blur(22px);opacity:.75}
+
+/* ---------- the record ---------- */
+.disc-btn{position:absolute;inset:0;border-radius:50%;padding:0;z-index:2}
+.disc{position:absolute;inset:0;border-radius:50%;
+  background:
+    radial-gradient(circle,transparent 0 33%,rgba(255,255,255,.07) 33.4%,transparent 34.2% 47%,rgba(255,255,255,.06) 47.3%,transparent 48% ),
+    radial-gradient(circle,transparent 0 40%,rgba(255,255,255,.05) 40.3%,transparent 41%),
+    repeating-radial-gradient(circle,#0b0b10 0 1.4px,#17171f 1.4px 2.8px),
+    var(--vinyl);
+  box-shadow:inset 0 0 0 calc(var(--D)*.012) #1c1c25,inset 0 0 0 calc(var(--D)*.02) #0b0b10}
+.label{position:absolute;inset:32%;border-radius:50%;background:var(--mustard);color:var(--deep);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:.9;
+  box-shadow:inset 0 0 0 calc(var(--D)*.008) rgba(22,34,143,.35)}
+.label::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--D)*.028);aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,-50%);background:var(--cobalt);box-shadow:0 0 0 calc(var(--D)*.006) rgba(22,34,143,.5)}
+.label .no{font-weight:800;font-stretch:75%;font-size:calc(var(--D)*.13);letter-spacing:-.02em;transform:translateY(-14%)}
+.label .sm{font-weight:600;font-size:calc(var(--D)*.032);position:absolute;bottom:17%}
+.label svg{width:34%;stroke:var(--deep);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:translateY(-12%)}
+.label .hint{position:absolute;bottom:17%;font-weight:700;font-size:calc(var(--D)*.036)}
+/* light that stays put while the vinyl turns underneath */
+.sheen{position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 24deg,transparent 0 7%,rgba(255,255,255,.17) 11%,transparent 17% 50%,rgba(255,255,255,.12) 61%,transparent 67% 100%)}
+
+/* ---------- tonearm ---------- */
+.arm{position:absolute;left:calc(var(--D)*1.06);top:calc(var(--D)*.04);width:0;height:0;z-index:3;transform-origin:0 0;pointer-events:none}
+.arm .base{position:absolute;width:calc(var(--D)*.15);aspect-ratio:1;left:calc(var(--D)*-.075);top:calc(var(--D)*-.075);border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#fff,#b9bfdc 55%,#8b93bd);box-shadow:0 6px 14px rgba(10,15,80,.55)}
+.arm .base::after{content:"";position:absolute;inset:32%;border-radius:50%;background:var(--deep)}
+.arm .bar{position:absolute;left:calc(var(--D)*-.011);top:0;width:calc(var(--D)*.022);height:calc(var(--D)*.92);border-radius:99px;
+  background:linear-gradient(90deg,#aab1d3,#fff 45%,#9aa2c9);box-shadow:0 8px 14px rgba(10,15,80,.4)}
+.arm .weight{position:absolute;left:calc(var(--D)*-.036);top:calc(var(--D)*-.17);width:calc(var(--D)*.072);height:calc(var(--D)*.12);border-radius:calc(var(--D)*.02);background:var(--vinyl)}
+.arm .head{position:absolute;left:calc(var(--D)*-.032);top:calc(var(--D)*.89);width:calc(var(--D)*.064);height:calc(var(--D)*.1);border-radius:calc(var(--D)*.012) calc(var(--D)*.012) calc(var(--D)*.02) calc(var(--D)*.02);background:var(--mustard);box-shadow:0 6px 10px rgba(10,15,80,.45)}
+
+/* ---------- status + scan ---------- */
+.status{margin:0;min-height:2.6em;max-width:19em;text-align:center;font-size:18px;line-height:1.3;font-weight:500}
+.scan{display:flex;align-items:center;gap:12px;padding:0 30px 0 24px;height:64px;border-radius:99px;background:var(--mustard);color:#14166b;
+  font-weight:800;font-size:21px;box-shadow:0 5px 0 var(--deep);transition:transform .12s,box-shadow .12s}
+.scan:active{transform:translateY(4px);box-shadow:0 1px 0 var(--deep)}
+.scan svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- intro sleeve ---------- */
+.sleeve{position:absolute;inset:0;z-index:4;background:var(--mustard);color:#101040;border-radius:4px;overflow:hidden;
+  box-shadow:0 18px 40px rgba(10,15,80,.55);display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--D)*.07)}
+.sleeve h1{margin:0;font-weight:800;font-stretch:75%;font-size:calc(var(--D)*.4);line-height:.8;letter-spacing:-.03em}
+.sleeve p{margin:0;font-weight:600;font-size:calc(var(--D)*.05);max-width:60%}
+.sleeve .bands{position:absolute;left:0;right:0;bottom:0;height:calc(var(--D)*.06);display:flex}
+.sleeve .bands i{flex:1}
+.sleeve[hidden]{display:none}
+.pre{opacity:0}
+
+/* ---------- scanner ---------- */
+#scan{position:fixed;inset:0;background:#000;display:none;z-index:20}
+#scan.on{display:block}
+#scan video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#scan .frame{position:absolute;left:50%;top:44%;width:min(72vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);box-shadow:0 0 0 100vmax rgba(15,20,90,.66);border-radius:26px}
+#scan .frame b{position:absolute;width:42px;height:42px;border:5px solid var(--mustard)}
+#scan .frame b:nth-child(1){left:-4px;top:-4px;border-right:0;border-bottom:0;border-radius:26px 0 0 0}
+#scan .frame b:nth-child(2){right:-4px;top:-4px;border-left:0;border-bottom:0;border-radius:0 26px 0 0}
+#scan .frame b:nth-child(3){left:-4px;bottom:-4px;border-right:0;border-top:0;border-radius:0 0 0 26px}
+#scan .frame b:nth-child(4){right:-4px;bottom:-4px;border-left:0;border-top:0;border-radius:0 0 26px 0}
+#scan .frame u{position:absolute;left:8px;right:8px;top:8px;height:3px;border-radius:2px;background:var(--mustard);box-shadow:0 0 14px var(--mustard);animation:sweep 1.8s ease-in-out infinite alternate}
+@keyframes sweep{to{transform:translateY(calc(min(72vw,300px) - 22px))}}
+#scan .msg{position:absolute;left:0;right:0;top:calc(44% + min(36vw,150px) + 28px);text-align:center;font-size:19px;font-weight:600;padding:0 24px}
+#scan .cancel{position:absolute;left:50%;bottom:calc(32px + env(safe-area-inset-bottom));transform:translateX(-50%);height:56px;padding:0 34px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
+
+/* ---------- settings sheet ---------- */
+.scrim{position:fixed;inset:0;background:rgba(8,12,70,.55);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--deep);border-radius:28px 28px 0 0;padding:26px 24px calc(26px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.9,.25,1);max-width:560px;margin:0 auto}
+.sheet.on{transform:none}
+.sheet h2{margin:0 0 20px;font-size:28px;font-weight:800;font-stretch:75%}
+.row{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}
+.row b{display:block;font-size:18px;font-weight:700}
+.row small{display:block;font-size:15px;opacity:.75;margin-top:3px;line-height:1.35}
+.sw{position:relative;flex:none;width:58px;height:34px}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;width:100%;height:100%;cursor:pointer}
+.sw span{position:absolute;inset:0;border-radius:99px;background:#3b4bb6;transition:background .2s;pointer-events:none}
+.sw span::before{content:"";position:absolute;width:26px;height:26px;left:4px;top:4px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.sw input:checked+span{background:var(--mustard)}
+.sw input:checked+span::before{transform:translateX(24px);background:var(--deep)}
+.sw input:focus-visible+span{outline:3px solid #fff;outline-offset:3px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 26px}
+.seg button{height:50px;border-radius:14px;background:#2331a3;font-weight:700;font-size:16px;transition:background .15s,color .15s,transform .12s}
+.seg button:active{transform:scale(.96)}
+.seg button[aria-pressed=true]{background:var(--mustard);color:#14166b}
+.done{width:100%;height:56px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
+
+#yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+
+@media (prefers-reduced-motion:reduce){
+  .stage.on .rings i{animation:none}
+  .sheet,.scrim{transition:none}
+}
+@media (min-width:700px){:root{--D:min(52vw,58svh,470px)}}
 </style>
 </head>
 <body>
-<div class="stripes"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
-<header>
-  <h1>TIDSLÅT</h1>
-  <p>Skann et kort – lytt – gjett</p>
-</header>
-<main>
-  <div class="card-no" id="cardNo">Ingen kort valgt</div>
-  <button class="disc" id="disc" disabled aria-label="Spill av / pause">
-    <span class="label"><svg id="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+<header class="pre" id="head">
+  <span class="mark">Tidslåt</span>
+  <button class="gear" id="gear" aria-label="Innstillinger">
+    <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>
   </button>
-  <div class="bar"><i id="prog"></i></div>
-  <div class="status" id="status">Trykk «Skann kort» og hold QR-koden foran kameraet.</div>
-  <div class="row">
-    <button class="btn primary" id="scanBtn">📷 Skann kort</button>
-  </div>
-  <div class="opts">
-    <label class="opt">Start et tilfeldig sted
-      <span class="switch"><input type="checkbox" id="optRandom"><span></span></span>
-    </label>
-    <div class="opt">Spill i
-      <select id="optLen">
-        <option value="20">20 sek</option>
-        <option value="30" selected>30 sek</option>
-        <option value="60">60 sek</option>
-        <option value="0">hele låta</option>
-      </select>
+</header>
+
+<main>
+  <div class="stage" id="stage">
+    <div class="shadow"></div>
+    <div class="rings"><i></i><i></i><i></i></div>
+    <button class="disc-btn" id="discBtn" aria-label="Spill av eller pause">
+      <div class="disc" id="disc">
+        <div class="label" id="label">
+          <svg viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7H8l1.2-2h5.6L16 7h2.5A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.2"/></svg>
+          <span class="hint">Skann kort</span>
+        </div>
+      </div>
+      <div class="sheen"></div>
+    </button>
+    <div class="arm" id="arm"><div class="weight"></div><div class="bar"></div><div class="head"></div><div class="base"></div></div>
+    <div class="sleeve" id="sleeve" hidden>
+      <h1>Tids<br>låt</h1>
+      <p>Pop og rock fra 50-tallet til i dag</p>
+      <div class="bands"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
     </div>
   </div>
+  <p class="status pre" id="status" aria-live="polite">Skann et kort for å starte.</p>
+  <button class="scan pre" id="scanBtn">
+    <svg viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M7 12h10"/></svg>
+    Skann kort
+  </button>
 </main>
-<footer>Titler vises aldri her – fasiten står på baksiden av kortet.</footer>
 
-<div id="scan">
+<div id="scan" role="dialog" aria-label="Skann kort">
   <video id="video" playsinline muted></video>
-  <div class="frame"></div>
-  <div class="hint">Hold QR-koden inni rammen</div>
-  <button class="btn close" id="closeScan">Avbryt</button>
+  <div class="frame"><b></b><b></b><b></b><b></b><u></u></div>
+  <div class="msg">Hold QR-koden inni rammen</div>
+  <button class="cancel" id="closeScan">Avbryt</button>
 </div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Innstillinger" aria-hidden="true">
+  <h2>Innstillinger</h2>
+  <div class="row">
+    <div><b>Start et tilfeldig sted</b><small>Du hører ikke introen. Vanskeligere.</small></div>
+    <label class="sw"><input type="checkbox" id="optRandom" aria-label="Start et tilfeldig sted"><span></span></label>
+  </div>
+  <b style="font-size:18px">Spilletid</b>
+  <div class="seg" id="seg">
+    <button data-len="20">20 sek</button><button data-len="30">30 sek</button><button data-len="60">60 sek</button><button data-len="0">Hele låta</button>
+  </div>
+  <button class="done" id="done">Ferdig</button>
+</div>
+
 <div id="yt-wrap"><div id="yt"></div></div>
 <canvas id="canvas" hidden></canvas>
 
 <script src="jsQR.js"></script>
 <script>
-// Card number -> YouTube video id. No titles or artists are stored on this page.
+// Kortnummer -> YouTube-ID. Ingen titler eller artister finnes på siden.
 const CARDS = {"1": "Uf4rxCB4lys", "2": "ZgdufzXvjqw", "3": "nrigbqKUWtk", "4": "gj0Rz-uP4Mk", "5": "_DGATUBGzYo", "6": "9iayJ8u4Qew", "7": "WGoDaYjdfSg", "8": "MMFj8uDubsE", "9": "VtXl8xAPAtA", "10": "QkF3oxziUI4", "11": "fJ9rUzIMcZQ", "12": "aBKEt3MhNMM", "13": "xFrGuyw1V8s", "14": "yqrAPOZxgzU", "15": "9jK-NcRmVcw", "16": "djV11Xbc914", "17": "Zi_XLOBDo_Y", "18": "b_rIk8yKDGI", "19": "182f6dTagkU", "20": "rog8ou-ZepE", "21": "hTWKbfoikeg", "22": "4fndeDfaWCg", "23": "gJLIiF15wjQ", "24": "bx1Bh8ZvH84", "25": "CduA0TULnow", "26": "Co0tTeuUVhU", "27": "IcrbM1l_BoI", "28": "nfWlot6h_JM", "29": "A_MjCqQoLLA", "30": "siO6dkqidc4", "31": "EzU0ofo3jOs", "32": "_ydMlTassYc", "33": "SR6iYWJxHqs", "34": "BkFBGDz2rrk"};
 
 const $ = id => document.getElementById(id);
-const disc = $('disc'), statusEl = $('status'), prog = $('prog'), icon = $('icon');
-const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-let player = null, ready = false, current = null, pendingId = null;
-let clipStart = 0, seeked = false, tick = null;
-
+const stage = $('stage'), disc = $('disc'), discBtn = $('discBtn'), arm = $('arm'), label = $('label'),
+      statusEl = $('status'), scanBtn = $('scanBtn');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const store = {
   get(k, d){ try{ const v = localStorage.getItem('tidslat.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
   set(k, v){ try{ localStorage.setItem('tidslat.'+k, JSON.stringify(v)); }catch(e){} }
 };
+const say = t => { statusEl.textContent = t; };
+
+/* ---------- vinyl: spins up and winds down ---------- */
+const spin = disc.animate([{transform:'rotate(0)'},{transform:'rotate(360deg)'}], {duration:1800, iterations:Infinity});
+spin.pause();
+let rate = 0, rateRaf = null;
+function rampTo(target, ms){
+  cancelAnimationFrame(rateRaf);
+  if (reduce) { rate = target; return; }
+  const from = rate, t0 = performance.now();
+  const step = now => {
+    const k = Math.min(1, (now - t0) / ms), e = k * k * (3 - 2 * k);
+    rate = from + (target - from) * e;
+    if (rate > 0.01) { spin.playbackRate = rate; if (spin.playState !== 'running') spin.play(); }
+    if (k < 1) rateRaf = requestAnimationFrame(step);
+    else if (target === 0) spin.pause();
+  };
+  rateRaf = requestAnimationFrame(step);
+}
+
+/* ---------- tonearm: angle follows how far into the clip we are ---------- */
+const PX = 1.06, PY = 0.04, L = 0.92;
+function angleFor(r){            // solve for the arm angle (deg) whose tip sits r*D from the record centre
+  let lo = 0, hi = 70;
+  for (let i = 0; i < 40; i++) {
+    const m = (lo + hi) / 2, a = m * Math.PI / 180;
+    const d = Math.hypot(PX - L * Math.sin(a) - .5, PY + L * Math.cos(a) - .5);
+    d > r ? lo = m : hi = m;
+  }
+  return (lo + hi) / 2;
+}
+const A_REST = 3, A_OUT = angleFor(.455), A_IN = angleFor(.215);
+function setArm(deg, ms, ease){
+  arm.style.transition = `transform ${ms}ms ${ease || 'cubic-bezier(.45,0,.2,1)'}`;
+  arm.style.transform = `rotate(${deg}deg)`;
+}
+setArm(A_REST, 0);
+
+/* ---------- state ---------- */
+let player = null, ready = false, current = null, pendingId = null;
+let clipStart = 0, seeked = false, tick = null, playing = false, ended = false;
+
+function setPlaying(on){
+  playing = on;
+  stage.classList.toggle('on', on);
+  rampTo(on ? 1 : 0, on ? 900 : 1100);
+}
+
+/* ---------- settings ---------- */
+const sheet = $('sheet'), scrim = $('scrim');
 $('optRandom').checked = store.get('random', false);
-$('optLen').value = String(store.get('len', 30));
 $('optRandom').onchange = e => store.set('random', e.target.checked);
-$('optLen').onchange = e => store.set('len', +e.target.value);
+function markLen(){ const v = store.get('len', 30); document.querySelectorAll('#seg button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.len === v))); }
+markLen();
+$('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('len', +b.dataset.len); markLen(); };
+const openSheet = on => { sheet.classList.toggle('on', on); scrim.classList.toggle('on', on); sheet.setAttribute('aria-hidden', String(!on)); (on ? $('done') : $('gear')).focus({preventScroll:true}); };
+$('gear').onclick = () => openSheet(true);
+$('done').onclick = scrim.onclick = () => openSheet(false);
 
-function setStatus(t){ statusEl.textContent = t; }
-function setPlaying(on){ icon.innerHTML = on ? PAUSE : PLAY; disc.classList.toggle('spin', on); }
-
-// ---------- YouTube (hidden) ----------
+/* ---------- YouTube (hidden) ---------- */
 const tag = document.createElement('script');
 tag.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(tag);
-setTimeout(() => { if (!ready) setStatus('Får ikke kontakt med YouTube. Sjekk nettet og last siden på nytt.'); }, 12000);
+setTimeout(() => { if (!ready) say('Får ikke kontakt med YouTube. Sjekk nettet og last siden på nytt.'); }, 12000);
 window.onYouTubeIframeAPIReady = () => {
   player = new YT.Player('yt', {
     width: 1, height: 1,
@@ -137,21 +292,17 @@ window.onYouTubeIframeAPIReady = () => {
     events: {
       onReady: () => { ready = true; player.unMute(); player.setVolume(100); if (pendingId) cue(pendingId); },
       onStateChange: onState,
-      onError: e => {
-        setPlaying(false);
-        setStatus('Denne låta kan ikke spilles her (feil ' + e.data + '). Prøv et annet kort.');
-      }
+      onError: e => { setPlaying(false); setArm(A_REST, 900); say('Denne låta kan ikke spilles her (feil ' + e.data + '). Prøv et annet kort.'); }
     }
   });
 };
 
 function cue(id){
-  if (!ready) { pendingId = id; setStatus('Laster spilleren …'); return; }
-  pendingId = null; seeked = false; clipStart = 0; prog.style.width = '0';
+  if (!ready) { pendingId = id; say('Henter spilleren …'); return; }
+  pendingId = null; seeked = false; ended = false; clipStart = 0;
   player.cueVideoById(id);
-  disc.disabled = false;
-  setStatus('Klar! Trykk på platen for å spille.');
-  try { player.playVideo(); } catch(e) {}   // starts by itself where the browser allows it
+  say('Trykk på platen for å spille.');
+  try { player.playVideo(); } catch(e) {}        // starter av seg selv der nettleseren tillater det
 }
 
 function onState(e){
@@ -161,85 +312,89 @@ function onState(e){
       seeked = true;
       const dur = player.getDuration() || 0;
       if ($('optRandom').checked && dur > 60) {
-        const t = Math.floor(dur * (0.15 + Math.random() * 0.45));
+        const t = Math.floor(dur * (.15 + Math.random() * .45));
         player.seekTo(t, true); clipStart = t;
       } else clipStart = player.getCurrentTime() || 0;
     }
-    setPlaying(true); setStatus('Lytt … hva er det?'); startTick();
-  } else if (e.data === S.PAUSED || e.data === S.ENDED || e.data === S.CUED) {
+    ended = false;
+    setPlaying(true); setArm(armAngle(), 1100); say('Hva spiller det? Gjett før du snur kortet.'); startTick();
+  } else if (e.data === S.PAUSED || e.data === S.ENDED) {
     setPlaying(false); stopTick();
-    if (e.data === S.ENDED) setStatus('Ferdig! Snu kortet og sjekk fasiten.');
-  } else if (e.data === S.BUFFERING) {
-    setStatus('Laster …');
-  }
+    if (e.data === S.ENDED) { ended = true; setArm(A_REST, 1100); say('Ferdig. Snu kortet for å sjekke svaret.'); }
+  } else if (e.data === S.BUFFERING) say('Laster …');
 }
 
+function progress(){
+  const len = store.get('len', 30), now = player.getCurrentTime() || 0, dur = player.getDuration() || 0;
+  if (len > 0) return Math.min(1, Math.max(0, (now - clipStart) / len));
+  return dur ? Math.min(1, now / dur) : 0;
+}
+function armAngle(){ return A_OUT + (A_IN - A_OUT) * progress(); }
 function startTick(){
   stopTick();
   tick = setInterval(() => {
-    const len = +$('optLen').value;
-    const now = player.getCurrentTime ? player.getCurrentTime() : 0;
-    const dur = player.getDuration ? player.getDuration() : 0;
-    const played = Math.max(0, now - clipStart);
-    if (len > 0) {
-      prog.style.width = Math.min(100, played / len * 100) + '%';
-      if (played >= len) { player.pauseVideo(); setStatus('Tiden er ute! Gjett – og snu kortet.'); }
-    } else if (dur) prog.style.width = Math.min(100, now / dur * 100) + '%';
+    setArm(armAngle(), 260, 'linear');
+    const len = store.get('len', 30);
+    if (len > 0 && (player.getCurrentTime() - clipStart) >= len) {
+      player.pauseVideo(); ended = true; setArm(A_REST, 1100); say('Tiden er ute. Snu kortet for å sjekke svaret.');
+    }
   }, 250);
 }
 function stopTick(){ if (tick) clearInterval(tick); tick = null; }
 
-disc.onclick = () => {
-  if (!player || !current) return;
-  const st = player.getPlayerState();
-  if (st === YT.PlayerState.PLAYING) player.pauseVideo();
-  else {
-    const len = +$('optLen').value;
-    if (len > 0 && seeked && (player.getCurrentTime() - clipStart) >= len) {
-      player.seekTo(clipStart, true); prog.style.width = '0';
-    }
-    player.playVideo();
-  }
+discBtn.onclick = () => {
+  if (!current) { startScan(); return; }
+  if (!player || !ready) return;
+  if (player.getPlayerState() === YT.PlayerState.PLAYING) { player.pauseVideo(); return; }
+  if (ended) { seeked = true; player.seekTo(clipStart, true); ended = false; }
+  player.playVideo();
 };
 
-// ---------- which card? ----------
-function loadCard(n){
+/* ---------- loading a card: old record out, new record in ---------- */
+let swapping = false;
+async function loadCard(n, instant){
   const id = CARDS[n];
-  if (!id) { setStatus('Fant ikke kort #' + n + '.'); return; }
+  if (!id) { say('Fant ikke kort #' + n + '.'); return; }
+  if (swapping) return; swapping = true;
+  try { if (player && ready) player.pauseVideo(); } catch(e) {}
+  setPlaying(false); setArm(A_REST, 700);
+  if (!instant && current && !reduce) {
+    await discBtn.animate([{transform:'none',opacity:1},{transform:'translateX(-115%) rotate(-40deg)',opacity:0}], {duration:380, easing:'cubic-bezier(.5,0,.8,.4)', fill:'forwards'}).finished;
+  }
   current = n;
-  $('cardNo').innerHTML = 'Kort <b>#' + String(n).padStart(2, '0') + '</b>';
+  label.innerHTML = '<span class="no">' + String(n).padStart(2, '0') + '</span><span class="sm">kort</span>';
+  if (!reduce) {
+    discBtn.getAnimations().forEach(a => a.cancel());
+    discBtn.animate([{transform:'translateX(115%) rotate(40deg) scale(.94)',opacity:0},{transform:'none',opacity:1}], {duration:620, easing:'cubic-bezier(.2,.9,.25,1)'});
+  }
+  swapping = false;
   cue(id);
 }
+
+/* ---------- reading the QR code ---------- */
 function parseCode(text){
   text = (text || '').trim();
   let m = text.match(/#(\d{1,3})\s*$/) || text.match(/[?&]k=(\d{1,3})/);
   if (m) return { card: +m[1] };
-  m = text.match(/(?:youtu\.be\/|[?&]v=)([\w-]{11})/);          // older cards with YouTube codes
+  m = text.match(/(?:youtu\.be\/|[?&]v=)([\w-]{11})/);          // eldre kort med YouTube-kode
   if (m) { const n = Object.keys(CARDS).find(k => CARDS[k] === m[1]); return n ? { card: +n } : null; }
   return null;
 }
-function fromHash(){
-  const m = location.hash.match(/^#(\d{1,3})$/);
-  if (m) loadCard(+m[1]);
-}
-window.addEventListener('hashchange', fromHash);
-fromHash();
-
-// ---------- scanner (camera stays on this page) ----------
 const video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d', { willReadFrequently: true });
 let stream = null, raf = null;
-$('scanBtn').onclick = async () => {
-  try { if (player && player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo(); } catch(e) {}
+async function startScan(){
+  try { if (player && ready && player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo(); } catch(e) {}
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
   } catch (e) {
-    setStatus('Fikk ikke tilgang til kameraet. Tillat kamera for siden i innstillingene og prøv igjen.');
+    say('Siden får ikke bruke kameraet. Åpne innstillingene for nettleseren, tillat kamera for denne siden og prøv igjen.');
     return;
   }
   video.srcObject = stream; await video.play();
   $('scan').classList.add('on');
   scanLoop();
-};
+}
+scanBtn.onclick = startScan;
 $('closeScan').onclick = stopScan;
 function stopScan(){
   $('scan').classList.remove('on');
@@ -253,19 +408,67 @@ function scanLoop(){
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
-    if (code) {
-      const r = parseCode(code.data);
-      if (r) {
-        stopScan();
-        if (navigator.vibrate) navigator.vibrate(60);
-        if (location.hash !== '#' + r.card) history.replaceState(null, '', '#' + r.card);
-        loadCard(r.card);
-        return;
-      }
+    const r = code && parseCode(code.data);
+    if (r) {
+      stopScan();
+      if (navigator.vibrate) navigator.vibrate(60);
+      if (location.hash !== '#' + r.card) history.replaceState(null, '', '#' + r.card);
+      loadCard(r.card);
+      return;
     }
   }
   raf = requestAnimationFrame(scanLoop);
 }
+
+/* ---------- intro: the record slides out of its sleeve ---------- */
+const chrome = [ $('head'), statusEl, scanBtn ];
+const reveal = () => chrome.forEach(el => { el.classList.remove('pre'); if (!reduce) el.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}], {duration:520, easing:'ease-out'}); });
+const startHash = (location.hash.match(/^#(\d{1,3})$/) || [])[1];
+let skipIntro = null;
+
+async function intro(){
+  const sleeve = $('sleeve'), D = stage.offsetWidth;
+  sleeve.hidden = false;
+  arm.style.opacity = 0;
+  let skipped = false;
+  const wait = ms => new Promise(r => { const t = setTimeout(r, ms); skipIntro = () => { skipped = true; clearTimeout(t); r(); }; });
+  document.addEventListener('pointerdown', () => skipIntro && skipIntro(), { once: true });
+
+  sleeve.animate([{transform:'translateY(46px) scale(.93)',opacity:0},{transform:'none',opacity:1}], {duration:600, easing:'cubic-bezier(.2,.8,.2,1)', fill:'both'});
+  await wait(700);
+  if (!skipped) {
+    discBtn.animate([{transform:'none'},{transform:`translateY(${-D * .46}px)`}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)', fill:'forwards'});
+    disc.animate([{rotate:'0deg'},{rotate:'200deg'}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)'});
+    await wait(1050);
+  }
+  if (!skipped) {
+    sleeve.animate([{transform:'none',opacity:1},{transform:'translateY(115%) rotate(7deg)',opacity:0}], {duration:720, easing:'cubic-bezier(.6,0,.9,.4)', fill:'forwards'});
+    discBtn.getAnimations().forEach(a => a.cancel());
+    discBtn.animate([{transform:`translateY(${-D * .46}px)`},{transform:'none'}], {duration:760, easing:'cubic-bezier(.2,.9,.25,1)'});
+    await wait(780);
+  }
+  discBtn.getAnimations().forEach(a => a.cancel());
+  sleeve.getAnimations().forEach(a => a.cancel());
+  sleeve.hidden = true;
+  arm.style.opacity = 1;
+  setArm(A_REST + 16, 0); arm.getBoundingClientRect();
+  setArm(A_REST, 800);
+  reveal();
+  skipIntro = null;
+}
+
+async function boot(){
+  if (reduce || startHash) {            // åpnet fra et kort: rett på sak
+    reveal();
+    if (!reduce) discBtn.animate([{transform:'scale(.9)',opacity:0},{transform:'none',opacity:1}], {duration:500, easing:'cubic-bezier(.2,.9,.25,1)'});
+  } else {
+    await Promise.race([ document.fonts.ready, new Promise(r => setTimeout(r, 900)) ]);
+    await intro();
+  }
+  if (startHash) loadCard(+startHash, true);
+}
+window.addEventListener('hashchange', () => { const m = location.hash.match(/^#(\d{1,3})$/); if (m) loadCard(+m[1]); });
+boot();
 </script>
 </body>
 </html>
