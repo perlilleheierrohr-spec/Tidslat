@@ -319,10 +319,65 @@ button.wrong{background:var(--red) !important;color:#fff !important}
 .art-icons span{width:58px;height:58px;border-radius:16px;background:var(--deep);display:grid;place-items:center}
 .art-icons svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 
+/* ================= splash ================= */
+.splash{position:fixed;inset:0;z-index:20;pointer-events:none;display:grid;place-items:center;overflow:hidden}
+.sbands{position:absolute;inset:0;display:flex}
+.sbands i{flex:1;transform:scaleY(0);transform-origin:bottom}
+.stitle{position:relative;display:flex;font-weight:800;font-stretch:75%;font-size:clamp(72px,20vw,200px);line-height:1;letter-spacing:-.02em;color:#fff;text-shadow:0 8px 30px rgba(10,15,80,.35);transform-origin:center}
+.stitle span{display:inline-block;opacity:0}
+.note{position:fixed;width:26px;height:26px;z-index:21;pointer-events:none}
+.confetti{position:fixed;width:10px;height:14px;z-index:60;pointer-events:none;border-radius:2px}
+
+/* ================= leaderboard ================= */
+.lb-list{display:flex;flex-direction:column;gap:8px;margin:4px 0 16px;min-height:120px}
+.lb-row{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:10px;background:#2331a3;border-radius:14px;padding:9px 14px 9px 9px}
+.lb-row.me{background:var(--mustard);color:var(--ink)}
+.lb-rank{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-stretch:80%;font-size:18px;background:var(--deep)}
+.lb-row.me .lb-rank{background:var(--ink);color:var(--mustard)}
+.lb-row.g1 .lb-rank{background:#f4b400;color:var(--ink)} .lb-row.g2 .lb-rank{background:#c9d0e8;color:var(--ink)} .lb-row.g3 .lb-rank{background:#d9925b;color:var(--ink)}
+.lb-name{font-weight:700;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-name small{display:block;font-weight:500;font-size:12.5px;opacity:.75}
+.lb-pts{text-align:right;font-weight:800;font-stretch:80%;font-size:22px;line-height:1}
+.lb-pts small{display:block;font-weight:600;font-stretch:100%;font-size:11.5px;opacity:.75;margin-top:2px}
+.lb-empty{opacity:.8;font-size:15px;line-height:1.4;padding:10px 2px}
+.lb-note{font-size:13.5px;opacity:.75;line-height:1.4;margin:0 0 14px}
+.finish{background:var(--deep);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:400px}
+.finish .big{font-weight:800;font-stretch:75%;font-size:54px;line-height:.9;color:var(--mustard)}
+.finish .big small{font-size:22px;color:#fff;font-stretch:90%}
+.finish p{margin:0;font-size:15px;line-height:1.4}
+.finish form{display:flex;gap:8px}
+.finish input{flex:1;min-width:0;height:50px;border-radius:14px;border:2px solid transparent;background:#fff;color:var(--ink);padding:0 14px;font-size:17px;font-weight:600}
+.finish input:focus{outline:none;border-color:var(--mustard)}
+.finish button{height:50px;padding:0 16px;border-radius:14px;background:var(--mustard);color:var(--ink);font-weight:800;font-size:15px}
+
+/* guide art */
+.art-notes{position:absolute;inset:0;pointer-events:none}
+.art-notes svg{position:absolute;bottom:-20px;width:22px;height:22px;animation:floatup 3.2s ease-in infinite;opacity:0}
+@keyframes floatup{0%{transform:translateY(0) rotate(-10deg);opacity:0}15%{opacity:1}100%{transform:translateY(-170px) rotate(20deg);opacity:0}}
+.art-eq{position:absolute;bottom:14px;display:flex;gap:4px;align-items:flex-end;height:22px}
+.art-eq i{width:6px;height:100%;border-radius:3px;background:var(--mustard);transform-origin:bottom;animation:eq .8s ease-in-out infinite alternate}
+.art-icons span{animation:pulse 2.4s ease-in-out infinite}
+.art-icons span:nth-child(2){animation-delay:.8s}.art-icons span:nth-child(3){animation-delay:1.6s}
+@keyframes pulse{0%,20%,100%{transform:none;background:var(--deep)}8%{transform:translateY(-8px) scale(1.08);background:var(--mustard)}}
+.art-flip div{position:relative;background:none}
+.art-flip b{position:absolute;inset:0;border-radius:8px;display:grid;place-items:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.art-flip b:first-child{background:var(--mustard);color:var(--deep)}
+.art-flip b:last-child{background:#dc3389;color:#fff;transform:rotateY(180deg);font-size:26px}
+.art-bars{display:flex;gap:12px;align-items:flex-end;height:100px}
+.art-bars i{width:30px;border-radius:8px 8px 3px 3px;transform-origin:bottom;animation:grow 2.6s cubic-bezier(.3,1.4,.5,1) infinite}
+@keyframes grow{0%{transform:scaleY(.1)}35%,85%{transform:none}100%{transform:scaleY(.1)}}
+.art-lb{display:flex;flex-direction:column;gap:6px;width:190px}
+.art-lb div{display:flex;align-items:center;gap:8px;height:24px;border-radius:8px;background:var(--deep);padding:0 8px;color:#fff;font-weight:700;font-size:12px;animation:slidein 3s ease-out infinite;opacity:0}
+.art-lb div:nth-child(2){animation-delay:.2s}.art-lb div:nth-child(3){animation-delay:.4s}
+.art-lb div b{width:16px;height:16px;border-radius:5px;display:grid;place-items:center;font-size:10px;color:var(--ink)}
+.art-lb div span{flex:1}
+@keyframes slidein{0%{opacity:0;transform:translateX(-20px)}12%,85%{opacity:1;transform:none}100%{opacity:0}}
+
 #yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
-  .stage.on .rings i,.eq i,.art-disc,.art-flip div,.mini .md.on{animation:none}
+  .stage.on .rings i,.eq i,.art-disc,.art-flip div,.mini .md.on,.art-notes svg,.art-eq i,.art-icons span,.art-bars i,.art-lb div{animation:none}
+  .art-lb div{opacity:1}
   .sheet,.scrim,.modes .pill,.eq,.dcard .inner{transition:none}
 }
 </style>
@@ -338,6 +393,7 @@ button.wrong{background:var(--red) !important;color:#fff !important}
   </div>
   <div class="icons">
     <button class="icon" id="helpBtn" aria-label="Slik virker siden"><b>?</b></button>
+    <button class="icon" id="lbBtn" aria-label="Toppliste"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8M10 17h4"/></svg></button>
     <button class="icon" id="scoreBtn" aria-label="Poengtavle"><svg viewBox="0 0 24 24"><path d="M4 20V13h5v7M9 20V8h6v12M15 20v-5h5v5"/><path d="M3 20h18"/></svg></button>
     <button class="icon" id="gear" aria-label="Innstillinger"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg></button>
   </div>
@@ -459,6 +515,19 @@ button.wrong{background:var(--red) !important;color:#fff !important}
   <button class="done-btn" id="scoreDone">Ferdig</button>
 </div>
 
+<div class="sheet" id="lbSheet" role="dialog" aria-label="Toppliste" aria-hidden="true">
+  <h2>Toppliste</h2>
+  <p class="lb-note">Fullfør en hel runde i Digital-modus for å komme på lista. Poengene er fra første gang du ser hvert kort, maks 102.</p>
+  <div class="seg two" id="lbTabs"><button data-lb="velg">Velg blant fire</button><button data-lb="skriv">Skriv selv</button></div>
+  <div class="lb-list" id="lbList"></div>
+  <button class="done-btn" id="lbDone">Lukk</button>
+</div>
+
+<div class="splash" id="splash" hidden aria-hidden="true">
+  <div class="sbands"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
+  <div class="stitle" id="stitle"></div>
+</div>
+
 <div class="guide" id="guide" hidden role="dialog" aria-label="Slik virker Tidslåt">
   <div class="gbox" id="gbox">
     <button class="gskip" id="gskip">Hopp over</button>
@@ -477,6 +546,8 @@ const CARDS = {"1": "Y-9Y4CCIWnM", "2": "ZgdufzXvjqw", "3": "nrigbqKUWtk", "4": 
 const ALT = {"1": ["TReqmJ7iX2M", "aKCt8ssC7cs", "kSCpu-Jp4OU"], "2": ["-Hlbn3O7Rpo", "hzYBEJgKjv0", "VsAlSuEG26A"], "3": ["AeZRYhLDLeU", "s_NLlOiD1Wo", "zVIX6rN79oQ"], "4": ["PpsUOOfb-vE", "Dk-jukA7PsM", "cl6qrdZoGHY"], "5": ["v1HDt1tknTc", "KjSy6hNwFno", "Lr59zm006GY"], "6": ["JzqGZjFnYnA", "U0yIf9Tkgu4", "F_97DmMUl-k"], "7": ["E8E11gM5Huo", "ZVqG0g0lqYU", "fGeTDLv6ti0"], "8": ["GjmG0tsvff0", "kMLm6ti4e10", "FJoItwNXcoc"], "9": ["xwwABrNLvFs", "R7dQjOCLQI8", "QlgNMZnLsIQ"], "10": ["X791IzOwt3Q", "SosGmJm-GJ0", "RvMxA5C-3x0"], "11": ["xG16sdjLtc0", "GR1G2rl8GGY", "V8QqZ0Qb3U8"], "12": ["ldMBytWjpJ0", "t365MuktYQs", "h9tPn70Hq8Y"], "13": ["P5AqvKYYQEE", "n1eSiygZR4Q", "A8JyEvvlBB8"], "14": ["TlrvTKhdX9k", "g-38GX2YQig", "n4aitHz68Y8"], "15": ["4hj8M8XZpis", "bTkWoiG4Nyw", "aLbTcEr6E9A"], "16": ["MIgK3zOk0zg", "JLyTfOZp8oM", "NaQ083rNUwc"], "17": ["Kr4EQDVETuA", "p1ct1plRUtw", "OZGtRvYF-A4"], "18": ["zz_yJrQ5u5o", "IaHQYTm14Kc", "79fzeNUqQbQ"], "19": ["GiRE7LhiXaM", "s3wNuru4U0I", "pp2mlxsxOes"], "20": ["8819CVkxKPk", "GOQtzxPnoY0", "AqYFGwKqhVw"], "21": ["_rjTqFyWnug", "q8sGURLcGK4", "lVkUZh7Jj-0"], "22": ["-aKJE1lanQk", "z6Wq59qrdB0", "T_cnnhd_ZlA"], "23": ["tTZDHlnTgR0", "1fDFCmhD8_Y", "WEQveK3_o6s"], "24": ["FVdjZYfDuLE", "q_c6hQD7aAw", "PoJh4JNedns"], "25": ["OO0aTOIU_3w", "3cmpHJkRzbU", "BUHdrfis5K0"], "26": ["p42ZPTgmrnY", "xk9EuEwMKcM", "xheuZhFEuDA"], "27": ["fE96CxPls5A", "a3Klv0p2f74", "BBP_GrLCY38"], "28": ["H59xVMF4zxE", "w9E7tRTkf5E", "9M-h3AthyMU"], "29": ["mQER0A0ej0M", "uNv_Bu_L6C8", "RhfHed14cNc"], "30": ["aev1nt-5_9M", "hb0jH0ce1NQ", "UbmQ5uX0QX4"], "31": ["LQ488QrqGE4", "MW3EyVNNCI4", "lm-8NaFdpO8"], "32": ["183mZ-wj7eA", "vk6014HuxcE", "GSPTsZiYboA"], "33": ["yq1Xp52ueRk", "LAW5JibpkTY", "5cBhVc83vTE"], "34": ["c5eu02fLI60", "2MDlzySds4Q", "u9t1unQJIV4"]};
 const INFO = JSON.parse(decodeURIComponent(escape(atob('eyIxIjogWyJKb2hubnkgQi4gR29vZGUiLCAiQ2h1Y2sgQmVycnkiLCAiNTAiXSwgIjIiOiBbIlJvY2sgQXJvdW5kIHRoZSBDbG9jayIsICJCaWxsIEhhbGV5ICYgSGlzIENvbWV0cyIsICI1MCJdLCAiMyI6IFsiRm9sc29tIFByaXNvbiBCbHVlcyIsICJKb2hubnkgQ2FzaCIsICI1MCJdLCAiNCI6IFsiSmFpbGhvdXNlIFJvY2siLCAiRWx2aXMgUHJlc2xleSIsICI1MCJdLCAiNSI6IFsiSSBXYW50IHRvIEhvbGQgWW91ciBIYW5kIiwgIlRoZSBCZWF0bGVzIiwgIjYwIl0sICI2IjogWyJSZXNwZWN0IiwgIkFyZXRoYSBGcmFua2xpbiIsICI2MCJdLCAiNyI6IFsiUHVycGxlIEhhemUiLCAiSmltaSBIZW5kcml4IiwgIjYwIl0sICI4IjogWyJCbG93aW4nIGluIHRoZSBXaW5kIiwgIkJvYiBEeWxhbiIsICI2MCJdLCAiOSI6IFsiU2d0LiBQZXBwZXIncyBMb25lbHkgSGVhcnRzIENsdWIgQmFuZCIsICJUaGUgQmVhdGxlcyIsICI2MCJdLCAiMTAiOiBbIlN0YWlyd2F5IHRvIEhlYXZlbiIsICJMZWQgWmVwcGVsaW4iLCAiNzAiXSwgIjExIjogWyJCb2hlbWlhbiBSaGFwc29keSIsICJRdWVlbiIsICI3MCJdLCAiMTIiOiBbIlN0YXJtYW4iLCAiRGF2aWQgQm93aWUiLCAiNzAiXSwgIjEzIjogWyJEYW5jaW5nIFF1ZWVuIiwgIkFCQkEiLCAiNzAiXSwgIjE0IjogWyJHb2QgU2F2ZSB0aGUgUXVlZW4iLCAiU2V4IFBpc3RvbHMiLCAiNzAiXSwgIjE1IjogWyJUaGUgRmluYWwgQ291bnRkb3duIiwgIkV1cm9wZSIsICI4MCJdLCAiMTYiOiBbIlRha2UgT24gTWUiLCAiYS1oYSIsICI4MCJdLCAiMTciOiBbIkJpbGxpZSBKZWFuIiwgIk1pY2hhZWwgSmFja3NvbiIsICI4MCJdLCAiMTgiOiBbIkxpa2UgYSBQcmF5ZXIiLCAiTWFkb25uYSIsICI4MCJdLCAiMTkiOiBbIldlIEFyZSB0aGUgV29ybGQiLCAiVVNBIGZvciBBZnJpY2EiLCAiODAiXSwgIjIwIjogWyJJY2UgSWNlIEJhYnkiLCAiVmFuaWxsYSBJY2UiLCAiODAiXSwgIjIxIjogWyJTbWVsbHMgTGlrZSBUZWVuIFNwaXJpdCIsICJOaXJ2YW5hIiwgIjkwIl0sICIyMiI6IFsiSSBXYW50IEl0IFRoYXQgV2F5IiwgIkJhY2tzdHJlZXQgQm95cyIsICI5MCJdLCAiMjMiOiBbIldhbm5hYmUiLCAiU3BpY2UgR2lybHMiLCAiOTAiXSwgIjI0IjogWyJXb25kZXJ3YWxsIiwgIk9hc2lzIiwgIjkwIl0sICIyNSI6IFsiT29wcyEuLi4gSSBEaWQgSXQgQWdhaW4iLCAiQnJpdG5leSBTcGVhcnMiLCAiMDAiXSwgIjI2IjogWyJIZWFydGxlc3MiLCAiS2FueWUgV2VzdCIsICIwMCJdLCAiMjciOiBbIldha2UgTWUgVXAiLCAiQXZpY2lpIiwgIjEwIl0sICIyOCI6IFsiU2hha2UgSXQgT2ZmIiwgIlRheWxvciBTd2lmdCIsICIxMCJdLCAiMjkiOiBbIkhleSBKdWRlIiwgIlRoZSBCZWF0bGVzIiwgIjYwIl0sICIzMCI6IFsiVGhlcmUgSXMgYSBMaWdodCBUaGF0IE5ldmVyIEdvZXMgT3V0IiwgIlRoZSBTbWl0aHMiLCAiODAiXSwgIjMxIjogWyJIb21lY29taW5nIiwgIkthbnllIFdlc3QgZnQuIENocmlzIE1hcnRpbiIsICIwMCJdLCAiMzIiOiBbIkVtcGlyZSBTdGF0ZSBvZiBNaW5kIiwgIkpheS1aIGZ0LiBBbGljaWEgS2V5cyIsICIwMCJdLCAiMzMiOiBbIkdyZW5hZGUiLCAiQnJ1bm8gTWFycyIsICIxMCJdLCAiMzQiOiBbIlNvIEdvb2QiLCAiYnVuaWkiLCAiMjAiXX0='))));   // { nr: [tittel, artist, tiår] }
 
+// Toppliste (Supabase). Tom URL betyr at databasen ikke er koblet til ennå.
+const LB = { url: '', key: '' };
 const $ = id => document.getElementById(id);
 const stage = $('stage'), deck = $('deck'), disc = $('disc'), discBtn = $('discBtn'), wobble = $('wobble'),
       arm = $('arm'), label = $('label'), statusEl = $('status'), ringBar = $('ringBar');
@@ -493,6 +564,35 @@ function say(t){
   if (statusEl.textContent === t) return;
   statusEl.textContent = t;
   anim(statusEl, [{opacity:0, transform:'translateY(6px)'},{opacity:1, transform:'none'}], {duration:280, easing:'ease-out'});
+}
+
+const BAND = ['#d6333a', '#ed7821', '#edb31a', '#dc3389', '#8545c7', '#2e6be0', '#129e9e', '#38a854', '#f4b400', '#ffffff'];
+function confetti(n = 90){
+  if (reduce) return;
+  for (let i = 0; i < n; i++) {
+    const c = document.createElement('i'); c.className = 'confetti';
+    c.style.background = BAND[i % BAND.length]; c.style.left = (innerWidth / 2) + 'px'; c.style.top = (innerHeight * .35) + 'px';
+    document.body.appendChild(c);
+    const a = Math.random() * Math.PI * 2, v = 160 + Math.random() * 420, dx = Math.cos(a) * v, dy = Math.sin(a) * v - 260;
+    c.animate([{transform:'translate(0,0) rotate(0)', opacity:1},
+               {transform:`translate(${dx}px,${dy}px) rotate(${Math.random()*720}deg)`, opacity:1, offset:.55},
+               {transform:`translate(${dx * 1.15}px,${dy + 520}px) rotate(${Math.random()*1080}deg)`, opacity:0}],
+              {duration:1600 + Math.random() * 900, easing:'cubic-bezier(.2,.6,.4,1)'}).finished.then(() => c.remove());
+  }
+}
+const NOTE = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 17.5a3 3 0 1 1-2-2.83V4l12-2v12.5a3 3 0 1 1-2-2.83V5.2L9 6.6z"/></svg>';
+function notesFrom(el, n = 12){
+  if (reduce || !el) return;
+  const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('span'); d.className = 'note'; d.innerHTML = NOTE; d.style.color = BAND[i % 8];
+    d.style.left = (cx - 13) + 'px'; d.style.top = (cy - 13) + 'px'; document.body.appendChild(d);
+    const a = (i / n) * Math.PI * 2 + Math.random() * .4, dist = r.width * (.55 + Math.random() * .4);
+    d.animate([{transform:'translate(0,0) scale(.3) rotate(0)', opacity:0},
+               {transform:`translate(${Math.cos(a) * dist * .6}px,${Math.sin(a) * dist * .6}px) scale(1.2) rotate(${(Math.random() - .5) * 60}deg)`, opacity:1, offset:.4},
+               {transform:`translate(${Math.cos(a) * dist}px,${Math.sin(a) * dist - 40}px) scale(.8) rotate(${(Math.random() - .5) * 90}deg)`, opacity:0}],
+              {duration:1300 + Math.random() * 400, easing:'cubic-bezier(.2,.8,.3,1)'}).finished.then(() => d.remove());
+  }
 }
 
 /* ---------- vinyl spin ---------- */
@@ -553,7 +653,7 @@ function openSheet(on, el){
   el.classList.toggle('on', on); scrim.classList.toggle('on', on); el.setAttribute('aria-hidden', String(!on));
 }
 $('gear').onclick = () => openSheet(true, sheet);
-$('done').onclick = $('scoreDone').onclick = scrim.onclick = () => openSheet(false);
+$('done').onclick = $('scoreDone').onclick = $('lbDone').onclick = scrim.onclick = () => openSheet(false);
 $('optRandom').checked = store.get('random', false);
 $('optRandom').onchange = e => store.set('random', e.target.checked);
 function markSeg(){
@@ -809,11 +909,12 @@ const DSHORT = {50:'50', 60:'60', 70:'70', 80:'80', 90:'90', '00':'2000', 10:'20
 const DCOL = {50:'#d6333a', 60:'#ed7821', 70:'#edb31a', 80:'#dc3389', 90:'#8545c7', '00':'#2e6be0', 10:'#129e9e', 20:'#38a854'};
 const QNAMES = ['Tiår', 'Artist', 'Låt'];
 const dcard = $('dcard'), dfront = $('dfront'), dback = $('dback'), quiz = $('quiz'), dacts = $('dacts');
-let dState = store.get('dstate2', null), dFlipped = false, dStep = 0, dRes = [], dOpts = null;
-function dFresh(){ return { deck: shuffle(Object.keys(CARDS).map(Number)), card: null, pts: 0, max: 0, played: 0 }; }
-if (!dState || !Array.isArray(dState.deck)) dState = dFresh();
+let dState = store.get('dstate3', null), dFlipped = false, dStep = 0, dRes = [], dOpts = null;
+function dFresh(){ return { deck: shuffle(Object.keys(CARDS).map(Number)), card: null, pts: 0, max: 0, played: 0, started: Date.now(), first: {}, usedChoose: false, submitted: false }; }
+if (!dState || !Array.isArray(dState.deck) || !dState.first) dState = dFresh();
 dState.card = null;
-const dSave = () => store.set('dstate2', dState);
+const dSave = () => store.set('dstate3', dState);
+const firstPts = () => Object.values(dState.first).reduce((a, b) => a + b, 0);
 const info = n => INFO[n];
 function norm(s){
   return String(s).toLowerCase().replace(/\s+(ft\.?|feat\.?|featuring|med)\s.*$/, '').normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -877,7 +978,7 @@ function dQuestion(){
 quiz.addEventListener('click', e => {
   const b = e.target.closest('#chips button, #opts button'); if (!b || !dState.card || dFlipped) return;
   if (b.parentElement.id === 'chips') dAnswer(b.dataset.v === info(dState.card)[2], b, '#chips', btn => btn.dataset.v === info(dState.card)[2]);
-  else { const field = dStep === 1 ? 1 : 0; dAnswer(dOpts[+b.dataset.i] === info(dState.card)[field], b, '#opts', btn => dOpts[+btn.dataset.i] === info(dState.card)[field]); }
+  else { dState.usedChoose = true; const field = dStep === 1 ? 1 : 0; dAnswer(dOpts[+b.dataset.i] === info(dState.card)[field], b, '#opts', btn => dOpts[+btn.dataset.i] === info(dState.card)[field]); }
 });
 function dAnswer(ok, el, groupSel, isRight){
   if (dStep > 2 || dFlipped) return;
@@ -902,8 +1003,8 @@ function dButtons(){
   else html = `<button class="pri" data-a="next">Neste kort</button>`;
   dacts.innerHTML = html;
   dacts.querySelectorAll('button').forEach((b, i) => anim(b, [{opacity:0, transform:'translateY(8px)'},{opacity:1, transform:'none'}], {duration:280, delay:i*60, easing:'ease-out', fill:'backwards'}));
-  const left = dState.deck.length;
-  $('dscore').textContent = dState.max ? `${dState.pts} av ${dState.max} poeng. ${left} kort igjen i bunken.` : `${left} kort i bunken. Hvert kort gir opptil 3 poeng.`;
+  const left = dState.deck.length, seen = Object.keys(dState.first).length;
+  $('dscore').textContent = seen ? `${firstPts()} poeng så langt, ${seen} av 34 kort sett. ${left} kort igjen i bunken.` : `${left} kort i bunken. Hvert kort gir opptil 3 poeng.`;
 }
 dacts.onclick = e => { const b = e.target.closest('button'); if (!b) return;
   ({draw: dNext, next: dNext, flip: dGiveUp, reset: () => { dState = dFresh(); dSave(); dShowDeck(); dButtons(); say('Ny runde. Trekk et kort.'); }})[b.dataset.a](); };
@@ -922,7 +1023,7 @@ async function dNext(){
   }
   if (!dState.deck.length) {
     dSave(); dShowDeck(); inner.getAnimations().forEach(a => a.cancel()); dButtons();
-    say(`Runden er ferdig! Du fikk ${dState.pts} av ${dState.max} poeng.`);
+    dFinish();
     return;
   }
   const n = dState.deck.pop(); dState.card = n; dState.played++; dSave();
@@ -941,14 +1042,116 @@ function dFlip(){
   anim($('dshine'), [{opacity:0, transform:'translateX(-60%)'},{opacity:1, offset:.5},{opacity:0, transform:'translateX(60%)'}], {duration:800, delay:150, easing:'ease-in-out'});
   for (let i = 0; i < 3; i++) if (dRes[i] === undefined) dRes[i] = false;
   const got = dRes.filter(Boolean).length;
-  dState.pts += got; dState.max += 3; dSave();
+  dState.pts += got; dState.max += 3;
+  if (dState.first[dState.card] === undefined) dState.first[dState.card] = got;   // toppliste: første forsøk teller
+  dSave();
   dQuestion(); dButtons();
   say(got === 3 ? 'Alle tre riktige! Kortet er ferdig.' : `${got} av 3 riktige. Kortet kommer tilbake senere i bunken.`);
   if (got === 3) anim(dcard, [{transform:'none'},{transform:'translateY(-12px) rotate(-2deg)'},{transform:'none'}], {duration:500, delay:500, easing:'cubic-bezier(.3,1.6,.5,1)'});
 }
+/* ---------- end of a round + leaderboard ---------- */
+const fmtTime = s => { const m = Math.floor(s / 60), r = s % 60; return m >= 60 ? `${Math.floor(m / 60)} t ${m % 60} min` : m ? `${m} min ${r ? r + ' s' : ''}`.trim() : `${r} s`; };
+function roundResult(){
+  return { points: firstPts(), cards: Math.min(300, Math.max(34, dState.played)), mode: dState.usedChoose ? 'velg' : 'skriv',
+           seconds: Math.min(86400, Math.max(60, Math.round((Date.now() - dState.started) / 1000))) };
+}
+function dFinish(){
+  if (!dState.result) { dState.result = roundResult(); dSave(); }
+  const r = dState.result;
+  say('Runden er ferdig!');
+  quiz.innerHTML = `<div class="finish" id="finish">
+    <div class="big">${r.points}<small> av 102 poeng</small></div>
+    <p>Du brukte ${fmtTime(r.seconds)} og trakk ${r.cards} kort. Svarmåte: ${r.mode === 'velg' ? 'velg blant fire' : 'skriv selv'}.</p>
+    ${dState.submitted ? `<p>Resultatet ditt ligger på topplista.</p><button type="button" id="seeLb">Se topplista</button>`
+      : `<form id="lbForm"><input id="lbName" maxlength="16" autocomplete="nickname" placeholder="Navnet ditt" value="${esc(store.get('name', ''))}"><button>Legg meg på topplista</button></form>`}
+  </div>`;
+  const f = $('finish');
+  anim(f, [{opacity:0, transform:'scale(.92) translateY(14px)'},{opacity:1, transform:'none'}], {duration:500, easing:'cubic-bezier(.2,1.3,.4,1)'});
+  const big = f.querySelector('.big'); let k = 0; const goal = r.points;
+  if (!reduce && goal > 0) { big.firstChild.textContent = 0; const t = setInterval(() => { k = Math.min(goal, k + Math.max(1, Math.ceil(goal / 30))); big.firstChild.textContent = k; if (k >= goal) clearInterval(t); }, 30); }
+  if (!dState.submitted) confetti(70);
+  if ($('lbForm')) $('lbForm').onsubmit = async e => {
+    e.preventDefault();
+    const name = $('lbName').value.trim().replace(/\s+/g, ' ').slice(0, 16);
+    if (name.length < 2) { anim($('lbName'), [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}], {duration:300}); say('Skriv et navn med minst to tegn.'); return; }
+    store.set('name', name);
+    const btn = $('lbForm').querySelector('button'); btn.disabled = true; btn.textContent = 'Sender …';
+    const res = await lbSubmit({ name, ...r });
+    dState.submitted = true; dSave();
+    confetti(120);
+    dFinish();
+    lbOpen(r.mode, res && res.id);
+  };
+  if ($('seeLb')) $('seeLb').onclick = () => lbOpen(r.mode);
+}
+const lbOn = () => LB.url && !LB.url.startsWith('__');
+const lbHeaders = () => ({ apikey: LB.key, Authorization: 'Bearer ' + LB.key, 'Content-Type': 'application/json' });
+async function lbPost(row){
+  const res = await fetch(LB.url + '/rest/v1/scores', { method: 'POST', headers: { ...lbHeaders(), Prefer: 'return=representation' }, body: JSON.stringify(row) });
+  if (!res.ok) throw new Error(res.status);
+  const saved = (await res.json())[0];
+  const ids = store.get('mineIds', []); ids.push(saved.id); store.set('mineIds', ids);
+  return saved;
+}
+async function lbSubmit(row){
+  const mine = store.get('myResults', []); mine.push({ ...row, at: Date.now() }); store.set('myResults', mine);
+  if (!lbOn()) { const p = store.get('pending', []); p.push(row); store.set('pending', p); say('Den felles topplista er ikke koblet til ennå. Resultatet er lagret og sendes inn senere.'); return null; }
+  try { return await lbPost(row); }
+  catch (err) {
+    const p = store.get('pending', []); p.push(row); store.set('pending', p);
+    say('Fikk ikke sendt resultatet akkurat nå. Det sendes neste gang du åpner siden.');
+    return null;
+  }
+}
+async function lbFlush(){
+  if (!lbOn()) return;
+  const p = store.get('pending', []); if (!p.length) return;
+  const left = [];
+  for (const row of p) { try { await lbPost(row); } catch (e) { left.push(row); } }
+  store.set('pending', left);
+}
+let lbMode = 'velg';
+function lbTabs(){ document.querySelectorAll('#lbTabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lb === lbMode))); }
+$('lbTabs').onclick = e => { const b = e.target.closest('button'); if (b) lbOpen(b.dataset.lb); };
+$('lbBtn').onclick = () => lbOpen();
+function lbRows(rows, highlight){
+  const ids = new Set(store.get('mineIds', []));
+  if (!rows.length) return `<div class="lb-empty">Ingen har fullført en runde med denne svarmåten ennå. Bli den første!</div>`;
+  return rows.map((r, i) => `<div class="lb-row ${i < 3 ? 'g' + (i + 1) : ''} ${(ids.has(r.id) || r.local) ? 'me' : ''}" ${highlight && r.id === highlight ? 'id="lbHere"' : ''}>
+    <span class="lb-rank">${i + 1}</span>
+    <span class="lb-name">${esc(r.name)}<small>${fmtTime(r.seconds)}, ${r.cards} kort trukket</small></span>
+    <span class="lb-pts">${r.points}<small>av 102</small></span></div>`).join('');
+}
+async function lbOpen(mode, highlight){
+  if (mode) lbMode = mode; lbTabs();
+  if (openEl !== $('lbSheet')) openSheet(true, $('lbSheet'));
+  const list = $('lbList');
+  let rows = [], note = '';
+  if (!lbOn()) {
+    rows = store.get('myResults', []).filter(r => r.mode === lbMode).map(r => ({ ...r, local: true }))
+      .sort((a, b) => b.points - a.points || a.seconds - b.seconds);
+    note = '<div class="lb-note">Den felles topplista er ikke koblet til ennå. Her ser du dine egne runder på denne enheten.</div>';
+  } else {
+    list.innerHTML = '<div class="lb-empty">Henter topplista …</div>';
+    try {
+      const res = await fetch(`${LB.url}/rest/v1/scores?select=id,name,points,cards,seconds,mode&mode=eq.${lbMode}&order=points.desc,seconds.asc&limit=50`, { headers: lbHeaders() });
+      if (!res.ok) throw new Error(res.status);
+      rows = await res.json();
+    } catch (e) { list.innerHTML = '<div class="lb-empty">Fikk ikke hentet topplista. Sjekk nettet og prøv igjen.</div>'; return; }
+  }
+  list.innerHTML = note + lbRows(rows, highlight);
+  list.querySelectorAll('.lb-row').forEach((el, i) => anim(el, [{opacity:0, transform:'translateX(-18px)'},{opacity:1, transform:'none'}], {duration:360, delay:Math.min(i, 12) * 45, easing:'cubic-bezier(.2,.9,.25,1)', fill:'backwards'}));
+  const here = $('lbHere');
+  if (here) { setTimeout(() => here.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }), 300);
+    anim(here, [{transform:'scale(1)'},{transform:'scale(1.04)'},{transform:'scale(1)'}], {duration:600, delay:700});
+    const rank = [...list.querySelectorAll('.lb-row')].indexOf(here) + 1; if (rank) say(`Du kom på ${rank}. plass!`); }
+}
+lbFlush();
+
 function dEnter(){
   [...dcard.querySelectorAll('.stack'), dcard.querySelector('.inner')].forEach((el, i) => anim(el, [{opacity:0, transform:'translateY(26px) rotate(-6deg)'},{opacity:1}], {duration:420, delay:i*70, easing:'cubic-bezier(.2,.9,.25,1)', fill:'backwards'}));
-  dQuestion(); dButtons();
+  if (!dState.card && !dState.deck.length) dFinish(); else dQuestion();
+  dButtons();
 }
 dButtons();
 
@@ -1020,17 +1223,20 @@ const ICON = {
   gear: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>'
 };
 const SLIDES = [
-  { art: '<div class="art-disc"></div>', h: 'Velkommen til Tidslåt',
+  { art: `<div class="art-disc"></div><div class="art-notes">${[8, 22, 38, 62, 78, 90].map((x, i) => `<svg style="left:${x}%;animation-delay:${i * .5}s;color:${BAND[i]}" viewBox="0 0 24 24"><path fill="currentColor" d="M9 17.5a3 3 0 1 1-2-2.83V4l12-2v12.5a3 3 0 1 1-2-2.83V5.2L9 6.6z"/></svg>`).join('')}</div><div class="art-eq">${[.5,.8,.6,.9,.55,.75,.65].map(d => `<i style="animation-duration:${d}s"></i>`).join('')}</div>`,
+    h: 'Velkommen til Tidslåt',
     p: 'Et musikkspill for å øve til lytteprøven: 34 låter fra 1954 til 2025. Du hører en låt og gjetter tiåret, artisten og navnet på låta.' },
   { art: `<div class="art-icons"><span>${ICON.skann}</span><span>${ICON.nummer}</span><span>${ICON.digital}</span></div>`, h: 'Tre måter å spille på',
     body: `<div class="gmodes">
       <div class="gmode"><span class="gi">${ICON.skann}</span><span><b>Skann</b>Har du de trykte kortene? Skann QR-koden med kameraet.</span></div>
       <div class="gmode"><span class="gi">${ICON.nummer}</span><span><b>Nummer</b>Skriv nummeret på kortet, for eksempel 07. Best på PC.</span></div>
       <div class="gmode"><span class="gi">${ICON.digital}</span><span><b>Digital</b>Uten kort: trekk et kort på skjermen, svar og snu det.</span></div></div>` },
-  { art: '<div class="art-flip"><div>?</div></div>', h: 'Titlene er hemmelige',
+  { art: '<div class="art-flip"><div><b>?</b><b>1985</b></div></div>', h: 'Titlene er hemmelige',
     p: 'Siden viser aldri hva som spiller. Trykk på platen for å spille eller pause. Ringen rundt platen viser hvor langt låta har kommet. Fasiten står på baksiden av kortet.' },
-  { art: `<div class="art-icons"><span>${ICON.score}</span><span>${ICON.gear}</span></div>`, h: 'Spill med andre',
+  { art: `<div class="art-bars">${['#f4b400', '#dc3389', '#129e9e', '#ed7821'].map((c, i) => `<i style="background:${c};height:${[90, 60, 75, 40][i]}px;animation-delay:${i * .12}s"></i>`).join('')}</div>`, h: 'Spill med andre',
     p: 'Poengtavla holder styr på lagene. I innstillingene velger du hvor lenge låta spilles, om den starter et tilfeldig sted, og om du vil velge eller skrive svarene.' },
+  { art: `<div class="art-lb">${[['#f4b400', 'Ida', 96], ['#c9d0e8', 'Per', 91], ['#d9925b', 'Jonas', 88]].map(([c, n, p], i) => `<div><b style="background:${c}">${i + 1}</b><span>${n}</span>${p}</div>`).join('')}</div>`, h: 'Kom deg på topplista',
+    p: 'Fullfør en hel runde i Digital-modus, alle 34 kortene, og skriv navnet ditt. Da havner du på topplista sammen med alle andre som har spilt. Pokalen øverst viser lista.' },
   { pick: true, h: 'Hvordan vil du starte?', p: 'Du kan bytte når som helst øverst på siden. Spørsmålstegnet viser denne guiden igjen.' }
 ];
 let gi = 0;
@@ -1041,11 +1247,13 @@ function gRender(dir){
   $('gdots').innerHTML = SLIDES.map((_, i) => `<i class="${i === gi ? 'on' : ''}"></i>`).join('');
   $('gback').style.visibility = gi ? 'visible' : 'hidden';
   $('gnext').textContent = gi === SLIDES.length - 1 ? 'Start' : 'Neste';
-  anim(wrap.firstChild, [{opacity:0, transform:`translateX(${dir >= 0 ? 30 : -30}px)`},{opacity:1, transform:'none'}], {duration:360, easing:'cubic-bezier(.2,.9,.25,1)'});
+  anim(wrap.firstChild, [{opacity:0, transform:`perspective(900px) translateX(${dir >= 0 ? 40 : -40}px) rotateY(${dir >= 0 ? -14 : 14}deg)`},{opacity:1, transform:'none'}], {duration:460, easing:'cubic-bezier(.2,.9,.25,1)'});
+  anim(wrap.querySelector('.gart'), [{transform:'scale(.9)', opacity:.4},{transform:'scale(1.02)', opacity:1, offset:.7},{transform:'none'}], {duration:520, easing:'ease-out'});
+  anim(wrap.querySelector('h2'), [{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'none'}], {duration:400, delay:90, easing:'ease-out', fill:'backwards'});
   wrap.querySelectorAll('.gmode, .gpick button, .art-icons span').forEach((el, i) => anim(el, [{opacity:0, transform:'translateY(10px) scale(.96)'},{opacity:1, transform:'none'}], {duration:320, delay:120 + i*70, easing:'ease-out', fill:'backwards'}));
-  wrap.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { setMode(b.dataset.pick); gClose(); });
+  wrap.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { setMode(b.dataset.pick); confetti(80); gClose(); });
 }
-function gGo(d){ const n = gi + d; if (n < 0) return; if (n >= SLIDES.length) { gClose(); return; } gi = n; gRender(d); }
+function gGo(d){ const n = gi + d; if (n < 0) return; if (n >= SLIDES.length) { confetti(80); gClose(); return; } gi = n; gRender(d); }
 function gOpen(){ gi = 0; $('guide').hidden = false; anim($('gbox'), [{opacity:0, transform:'translateY(30px) scale(.96)'},{opacity:1, transform:'none'}], {duration:420, easing:'cubic-bezier(.2,.9,.25,1)'}); gRender(1); }
 function gClose(){ store.set('seenGuide', true); const a = anim($('guide'), [{opacity:1},{opacity:0}], {duration:220}); const hide = () => { $('guide').hidden = true; }; a ? a.finished.then(hide) : hide(); }
 $('gnext').onclick = () => gGo(1); $('gback').onclick = () => gGo(-1); $('gskip').onclick = gClose;
@@ -1060,9 +1268,33 @@ const reveal = () => {
   if (mode === 'nummer') staggerKeys();
 };
 const startHash = (location.hash.match(/^#(\d{1,3})$/) || [])[1];
+let introSkipped = false;
+function skippableWait(ms){ return new Promise(r => { if (introSkipped) return r(); const t0 = performance.now(); const iv = setInterval(() => { if (introSkipped || performance.now() - t0 >= ms) { clearInterval(iv); r(); } }, 30); }); }
+async function splash(){
+  const sp = $('splash'), st = $('stitle'), bands = [...sp.querySelectorAll('.sbands i')];
+  st.innerHTML = [...'Tidslåt'].map(ch => `<span>${ch}</span>`).join('');
+  sp.hidden = false;
+  const onSkip = () => { introSkipped = true; };
+  addEventListener('pointerdown', onSkip, { once: true }); addEventListener('keydown', onSkip, { once: true });
+  // 1. the decade colours sweep up like a curtain
+  bands.forEach((b, i) => b.animate([{transform:'scaleY(0)'},{transform:'scaleY(1)'}], {duration:440, delay:i * 45, easing:'cubic-bezier(.6,0,.2,1)', fill:'both'}));
+  await skippableWait(560);
+  // 2. the letters bounce in one by one
+  st.querySelectorAll('span').forEach((l, i) => l.animate([{opacity:0, transform:'translateY(80px) rotate(-16deg) scale(.4)'},{opacity:1, transform:'translateY(-14px) rotate(5deg) scale(1.1)', offset:.6},{opacity:1, transform:'none'}], {duration:640, delay:i * 65, easing:'cubic-bezier(.2,.9,.25,1)', fill:'both'}));
+  await skippableWait(1150);
+  // 3. the curtain lifts, and the title flies up into the logo
+  bands.forEach((b, i) => { b.getAnimations().forEach(x => x.cancel()); b.style.transformOrigin = 'top'; b.animate([{transform:'scaleY(1)'},{transform:'scaleY(0)'}], {duration:520, delay:(bands.length - 1 - i) * 40, easing:'cubic-bezier(.6,0,.2,1)', fill:'forwards'}); });
+  const mark = document.querySelector('.mark'), a = st.getBoundingClientRect(), m = mark.getBoundingClientRect();
+  const k = Math.max(.1, m.height / a.height), dx = (m.left + m.width / 2) - (a.left + a.width / 2), dy = (m.top + m.height / 2) - (a.top + a.height / 2);
+  st.animate([{transform:'none', opacity:1},{transform:`translate(${dx}px,${dy}px) scale(${k})`, opacity:.2}], {duration:720, delay:120, easing:'cubic-bezier(.6,0,.2,1)', fill:'forwards'});
+  await skippableWait(860);
+  sp.hidden = true; st.getAnimations().forEach(x => x.cancel()); st.querySelectorAll('span').forEach(l => l.getAnimations().forEach(x => x.cancel()));
+  bands.forEach(b => { b.getAnimations().forEach(x => x.cancel()); b.style.transformOrigin = ''; });
+  removeEventListener('pointerdown', onSkip); removeEventListener('keydown', onSkip);
+}
 async function intro(){
   const sleeve = $('sleeve'), D = stage.offsetWidth;
-  if (!D) return;
+  if (!D || introSkipped) return;
   sleeve.hidden = false; arm.style.opacity = 0;
   let skipped = false, skip = null;
   const wait = ms => new Promise(r => { const t = setTimeout(r, ms); skip = () => { skipped = true; clearTimeout(t); r(); }; });
@@ -1074,7 +1306,8 @@ async function intro(){
     disc.animate([{rotate:'0deg'},{rotate:'200deg'}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)'}); await wait(1050); }
   if (!skipped) { sleeve.animate([{transform:'none',opacity:1},{transform:'translateY(115%) rotate(7deg)',opacity:0}], {duration:720, easing:'cubic-bezier(.6,0,.9,.4)', fill:'forwards'});
     discBtn.getAnimations().forEach(a => a.cancel());
-    discBtn.animate([{transform:`translateY(${-D * .46}px)`},{transform:'none'}], {duration:760, easing:'cubic-bezier(.2,.9,.25,1)'}); await wait(780); }
+    discBtn.animate([{transform:`translateY(${-D * .46}px)`},{transform:'none'}], {duration:760, easing:'cubic-bezier(.2,.9,.25,1)'}); await wait(560);
+    notesFrom(stage, 14); rampTo(1, 300); setTimeout(() => rampTo(0, 1400), 500); await wait(240); }
   discBtn.getAnimations().forEach(a => a.cancel()); sleeve.getAnimations().forEach(a => a.cancel());
   sleeve.hidden = true; arm.style.opacity = 1;
   setArm(A_REST + 16, 0); arm.getBoundingClientRect(); setArm(A_REST, 800, 'cubic-bezier(.3,1.4,.5,1)');
@@ -1083,9 +1316,11 @@ async function intro(){
 async function boot(){
   const touch = matchMedia('(pointer:coarse)').matches;
   setMode(store.get('mode', touch ? 'skann' : 'nummer'), true);
-  if (!reduce && !startHash && getComputedStyle(deck).display !== 'none') {
+  if (!reduce && !startHash) {
     await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]);
-    await intro();
+    let firstThisSession = true; try { firstThisSession = !sessionStorage.getItem('tidslat.splash'); sessionStorage.setItem('tidslat.splash', '1'); } catch(e) {}
+    if (firstThisSession) await splash();
+    if (getComputedStyle(deck).display !== 'none') await intro();
   }
   reveal();
   if (startHash) { if (mode === 'digital') setMode('skann'); loadCard(+startHash, false); }
