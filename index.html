@@ -14,98 +14,82 @@
 <style>
 @font-face{font-family:"Bricolage";src:url(bricolage.woff2) format("woff2-variations");font-weight:200 800;font-stretch:75% 100%;font-display:swap}
 :root{
-  --cobalt:#2339d6; --deep:#16228f; --mustard:#f4b400; --vinyl:#0b0b10; --ink:#14166b;
-  --D:min(80vw, 46svh, 430px);
+  --cobalt:#2339d6; --deep:#16228f; --deeper:#0e1766; --mustard:#f4b400; --vinyl:#0b0b10; --ink:#14166b;
+  --green:#2fa35a; --red:#d6333a;
+  --D:min(70vw, 38svh, 340px);
   font-family:"Bricolage",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--cobalt);color:#fff;overflow:hidden;touch-action:manipulation}
-body{display:flex;flex-direction:column;min-height:100svh;
+html{background:var(--cobalt);color:#fff;overflow-x:hidden}
+body{margin:0;min-height:100svh;display:flex;flex-direction:column;overflow-x:hidden;touch-action:manipulation;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button,input{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer;padding:0}
 :focus-visible{outline:3px solid var(--mustard);outline-offset:3px}
 .pre{opacity:0}
+[hidden]{display:none !important}
 
-/* ---------- header ---------- */
-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:14px 18px 0;position:relative;z-index:5}
-.mark{font-weight:800;font-stretch:75%;font-size:28px;letter-spacing:-.01em;line-height:1}
-.gear{justify-self:end;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--deep);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
-.gear:hover{transform:rotate(-25deg)}
-.gear:active{transform:scale(.9)}
-.gear svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
-.modes{position:relative;display:flex;background:var(--deep);border-radius:99px;padding:4px}
-.modes button{position:relative;z-index:1;height:38px;padding:0 16px;border-radius:99px;font-weight:700;font-size:15px;color:#c9cdf2;transition:color .25s}
+/* ================= header ================= */
+header{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"mark . icons" "modes modes modes";
+  align-items:center;gap:12px 10px;padding:12px 14px 4px;position:relative;z-index:6}
+.mark{grid-area:mark;font-weight:800;font-stretch:75%;font-size:27px;letter-spacing:-.01em;line-height:1}
+.icons{grid-area:icons;display:flex;gap:8px}
+.icon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--deep);transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.icon:active{transform:scale(.9)}
+.icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.icon b{font-weight:800;font-size:19px;line-height:1}
+.modes{grid-area:modes;position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:var(--deep);border-radius:99px;padding:4px}
+.modes button{position:relative;z-index:1;height:40px;border-radius:99px;font-weight:700;font-size:15px;color:#c9cdf2;transition:color .25s;white-space:nowrap}
 .modes button[aria-pressed=true]{color:var(--ink)}
 .modes .pill{position:absolute;top:4px;bottom:4px;left:0;border-radius:99px;background:var(--mustard);transition:transform .45s cubic-bezier(.3,1.35,.45,1),width .45s cubic-bezier(.3,1.35,.45,1)}
 
-/* ---------- layout ---------- */
-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2.6svh,26px);padding:4px 20px 18px;min-height:0}
-.deck{position:relative;display:flex;flex-direction:column;align-items:center}
-.stage{position:relative;width:var(--D);height:var(--D);transform:translateX(calc(var(--D) * -.04));margin-top:calc(var(--D) * .06)}
-.panel{position:relative;width:min(100%,380px);display:flex;flex-direction:column;align-items:center;gap:14px}
+/* ================= layout ================= */
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:10px 16px 28px;width:100%}
+.deck{position:relative;display:flex;flex-direction:column;align-items:center;width:100%}
+.stage{position:relative;width:var(--D);height:var(--D);transform:translateX(calc(var(--D) * -.05));margin-top:calc(var(--D) * .05)}
+.panel{position:relative;width:min(100%,420px);display:flex;flex-direction:column;align-items:center;gap:12px}
+.panel>*,.views,.view>*,.dwrap>*{flex-shrink:0}
+.status{margin:0;min-height:2.6em;max-width:24em;text-align:center;font-size:17px;line-height:1.3;font-weight:500}
+body.m-nummer{--D:min(48vw, 24svh, 230px)}
+body.m-digital .deck{display:none}
+
 @media (min-width:900px){
-  :root{--D:min(40vw, 64svh, 560px)}
-  header{padding:22px 40px 0}
+  body{min-height:100svh}
+  body{--D:min(38vw, 62svh, 540px)}
+  body.m-nummer{--D:min(38vw, 62svh, 540px)}
+  body.m-digital{--D:min(29vw, 52svh, 440px)}
+  body.m-digital .deck{display:flex}
+  header{grid-template-columns:1fr auto 1fr;grid-template-areas:"mark modes icons";padding:22px 40px 0}
+  .icons{justify-self:end}
   .mark{font-size:36px}
-  main{flex-direction:row;gap:clamp(48px,7vw,120px);padding:0 5vw 5svh;max-width:1500px;width:100%;margin:0 auto}
-  .panel{align-items:flex-start;width:380px}
-  .status{text-align:left !important;font-size:20px}
-  body.m-digital{--D:min(32vw, 56svh, 470px)}
-  body.m-digital main{gap:clamp(40px,5vw,90px)}
+  .modes{display:flex}
+  .modes button{padding:0 20px}
+  main{flex-direction:row;justify-content:center;align-items:center;gap:clamp(48px,6vw,110px);padding:0 4vw 4svh;max-width:1500px;margin:0 auto}
+  .deck{width:auto}
+  .panel{align-items:flex-start;width:400px}
+  .status{text-align:left;font-size:19px}
   .foot-bands{display:flex}
+  .mini{display:none !important}
+  body.m-digital .panel{width:auto;max-width:720px}
+  body.m-digital .dwrap{display:grid;grid-template-columns:auto 360px;column-gap:44px;row-gap:12px;align-items:start}
+  body.m-digital .dtop{grid-column:1;grid-row:1 / span 6;width:auto}
+  body.m-digital .dwrap>*:not(.dtop){grid-column:2}
 }
 .foot-bands{display:none;position:fixed;left:0;right:0;bottom:0;height:6px;z-index:1}
 .foot-bands i{flex:1}
 
-/* ---------- digital cards ---------- */
-.dwrap{display:flex;flex-direction:column;align-items:center;gap:13px;width:100%}
-.dwrap>*,.panel>*,.views,.view>*{flex-shrink:0}
-@media (min-width:900px){.dwrap{align-items:flex-start}}
-.dcard{--CW:min(300px, calc(46svh * .7045));position:relative;width:var(--CW);aspect-ratio:62/88;perspective:1400px;padding:0;border-radius:12px;flex:none}
-.dcard .stack{position:absolute;inset:0;border-radius:12px;background:#1a2699;transform:translate(6px,6px) rotate(2.5deg);box-shadow:0 10px 26px rgba(8,12,70,.35)}
-.dcard .stack.s2{transform:translate(12px,11px) rotate(5deg);background:#16208a}
-.dcard.empty .stack{opacity:0}
-.dcard .inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.3,1.25,.45,1)}
-.dcard.flipped .inner{transform:rotateY(180deg)}
-.dcard .face{position:absolute;inset:0;border-radius:12px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 18px 40px rgba(8,12,70,.5)}
-.dcard .face img{width:100%;height:100%;display:block;-webkit-user-drag:none;user-select:none}
-.dcard .back{transform:rotateY(180deg)}
-.dcard .shine{position:absolute;inset:0;border-radius:12px;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 48%,transparent 62%);opacity:0;backface-visibility:hidden}
-.dq{margin:2px 0 -3px;font-weight:700;font-size:16px}
-.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:min(100%,330px)}
-.chips button{height:42px;border-radius:12px;background:var(--deep);font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .25s,color .25s,transform .12s,opacity .25s}
-.chips button i{width:9px;height:9px;border-radius:50%;flex:none}
-.chips button:active{transform:scale(.94)}
-.chips button.right{background:#2fa35a}
-.chips button.wrong{background:#d6333a}
-.chips.answered button{pointer-events:none}
-.chips.answered button:not(.right):not(.wrong){background:#1b2795;color:#7f88c9}
-.chips.answered button:not(.right):not(.wrong) i{opacity:.35}
-.dacts{display:flex;gap:10px;width:min(100%,330px)}
-.dacts button{flex:1;height:52px;border-radius:99px;font-weight:800;font-size:17px;background:var(--deep);transition:transform .12s}
-.dacts button:active{transform:scale(.96)}
-.dacts .pri{background:var(--mustard);color:var(--ink);box-shadow:0 4px 0 #a87b00}
-.dscore{margin:0;font-size:14px;opacity:.8}
-@media (max-width:899px){
-  body.m-digital{--D:min(40vw,19svh,230px)}
-  body.m-digital main{gap:10px;justify-content:flex-start;padding-top:6px}
-  body.m-digital .eq{display:none}
-  .dcard{--CW:min(54vw, calc(34svh * .7045))}
-}
-@media (max-width:440px){ .modes button{padding:0 11px;font-size:14px} .mark{font-size:22px} }
-
-/* ---------- record + extras ---------- */
+/* ================= record ================= */
 .shadow{position:absolute;inset:4% -2% -6% 2%;border-radius:50%;background:var(--deep);filter:blur(22px);opacity:.75}
 .rings i{position:absolute;inset:-1%;border-radius:50%;border:2px solid rgba(255,255,255,.28);opacity:0;pointer-events:none}
 .stage.on .rings i{animation:ring 3.3s cubic-bezier(.2,.5,.3,1) infinite}
 .stage.on .rings i:nth-child(2){animation-delay:1.1s}
 .stage.on .rings i:nth-child(3){animation-delay:2.2s}
-@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.55);opacity:0}}
+@keyframes ring{0%{transform:scale(1);opacity:.5}100%{transform:scale(1.35);opacity:0}}
 .ring{position:absolute;inset:-5.5%;width:111%;height:111%;transform:rotate(-90deg);pointer-events:none;overflow:visible}
 .ring circle{fill:none;stroke-width:1.3;stroke-linecap:round}
 .ring .track{stroke:rgba(255,255,255,.14)}
 .ring .bar{stroke:var(--mustard);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .3s linear}
-.disc-btn{position:absolute;inset:0;border-radius:50%;padding:0;z-index:2}
+.disc-btn{position:absolute;inset:0;border-radius:50%;z-index:2}
 .wobble{position:absolute;inset:0;border-radius:50%}
 .disc{position:absolute;inset:0;border-radius:50%;
   background:
@@ -120,12 +104,10 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
   transform:translate(-50%,-50%);background:var(--cobalt);box-shadow:0 0 0 calc(var(--D)*.006) rgba(22,34,143,.5)}
 .label .no{font-weight:800;font-stretch:75%;font-size:calc(var(--D)*.13);letter-spacing:-.02em;transform:translateY(-14%)}
 .label .sm{font-weight:600;font-size:calc(var(--D)*.032);position:absolute;bottom:17%}
-.label svg{width:34%;stroke:var(--deep);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:translateY(-12%)}
-.label .hint{position:absolute;bottom:17%;font-weight:700;font-size:calc(var(--D)*.036)}
+.label svg{width:32%;stroke:var(--deep);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:translateY(-12%)}
+.label .hint{position:absolute;bottom:16%;font-weight:700;font-size:calc(var(--D)*.036)}
 .sheen{position:absolute;inset:0;border-radius:50%;pointer-events:none;
   background:conic-gradient(from 24deg,transparent 0 7%,rgba(255,255,255,.17) 11%,transparent 17% 50%,rgba(255,255,255,.12) 61%,transparent 67% 100%)}
-
-/* tonearm */
 .arm{position:absolute;left:calc(var(--D)*1.06);top:calc(var(--D)*.04);width:0;height:0;z-index:3;transform-origin:0 0;pointer-events:none}
 .arm .base{position:absolute;width:calc(var(--D)*.15);aspect-ratio:1;left:calc(var(--D)*-.075);top:calc(var(--D)*-.075);border-radius:50%;
   background:radial-gradient(circle at 38% 34%,#fff,#b9bfdc 55%,#8b93bd);box-shadow:0 6px 14px rgba(10,15,80,.55)}
@@ -134,62 +116,128 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
   background:linear-gradient(90deg,#aab1d3,#fff 45%,#9aa2c9);box-shadow:0 8px 14px rgba(10,15,80,.4)}
 .arm .weight{position:absolute;left:calc(var(--D)*-.036);top:calc(var(--D)*-.17);width:calc(var(--D)*.072);height:calc(var(--D)*.12);border-radius:calc(var(--D)*.02);background:var(--vinyl)}
 .arm .head{position:absolute;left:calc(var(--D)*-.032);top:calc(var(--D)*.89);width:calc(var(--D)*.064);height:calc(var(--D)*.1);border-radius:calc(var(--D)*.012) calc(var(--D)*.012) calc(var(--D)*.02) calc(var(--D)*.02);background:var(--mustard);box-shadow:0 6px 10px rgba(10,15,80,.45)}
-
-/* equalizer under the record */
-.eq{display:flex;gap:5px;align-items:flex-end;height:30px;margin-top:calc(var(--D)*.07);transform:scaleY(.12);transform-origin:bottom;transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
-.eq i{width:7px;height:100%;border-radius:4px;background:var(--mustard);transform-origin:bottom;animation:eq 0.9s ease-in-out infinite alternate;animation-play-state:paused}
+.eq{display:flex;gap:5px;align-items:flex-end;height:24px;margin-top:calc(var(--D)*.08);transform:scaleY(.12);transform-origin:bottom;transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
+.eq i{width:7px;height:100%;border-radius:4px;background:var(--mustard);transform-origin:bottom;animation:eq .9s ease-in-out infinite alternate;animation-play-state:paused}
 .eq i:nth-child(odd){background:#fff}
 .deck.on .eq{transform:none}
 .deck.on .eq i{animation-play-state:running}
 @keyframes eq{0%{transform:scaleY(.2)}100%{transform:scaleY(1)}}
 
-/* ---------- panel ---------- */
-.status{margin:0;min-height:2.6em;max-width:20em;text-align:center;font-size:18px;line-height:1.3;font-weight:500}
+/* mini player (digital mode on phones) */
+.mini{display:flex;align-items:center;gap:12px;width:100%;background:var(--deep);border-radius:20px;padding:8px 10px 8px 8px}
+.mini .md{position:relative;width:50px;height:50px;border-radius:50%;flex:none;
+  background:repeating-radial-gradient(circle,#0b0b10 0 1px,#1a1a24 1px 2px);box-shadow:inset 0 0 0 2px #1c1c25}
+.mini .md::after{content:attr(data-n);position:absolute;inset:30%;border-radius:50%;background:var(--mustard);color:var(--deep);
+  display:grid;place-items:center;font-weight:800;font-stretch:75%;font-size:11px}
+.mini .md.on{animation:spin 1.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mini .mt{flex:1;min-width:0}
+.mini .mt b{display:block;font-size:15px}
+.mini .mt span{display:block;font-size:13px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .mbar{height:4px;border-radius:2px;background:rgba(255,255,255,.15);margin-top:6px;overflow:hidden}
+.mini .mbar i{display:block;height:100%;width:0;background:var(--mustard);transition:width .3s linear}
+.mini .mp{width:46px;height:46px;border-radius:50%;background:var(--mustard);color:var(--ink);display:grid;place-items:center;flex:none}
+.mini .mp svg{width:22px;height:22px;fill:currentColor}
+
+/* ================= views ================= */
 .views{position:relative;width:100%;display:grid}
-.view{grid-area:1/1;display:flex;flex-direction:column;align-items:center;gap:12px}
+.view{grid-area:1/1;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
 @media (min-width:900px){.view{align-items:flex-start}}
-.view[hidden]{display:none}
-.scan{display:flex;align-items:center;gap:12px;padding:0 30px 0 24px;height:64px;border-radius:99px;background:var(--mustard);color:var(--ink);
-  font-weight:800;font-size:21px;box-shadow:0 5px 0 var(--deep);transition:transform .12s,box-shadow .12s}
+.scan{display:flex;align-items:center;gap:12px;padding:0 28px 0 22px;height:62px;border-radius:99px;background:var(--mustard);color:var(--ink);
+  font-weight:800;font-size:20px;box-shadow:0 5px 0 var(--deep);transition:transform .12s,box-shadow .12s}
 .scan:active{transform:translateY(4px);box-shadow:0 1px 0 var(--deep)}
 .scan svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .small{font-size:15px;opacity:.8;margin:0;line-height:1.4;max-width:22em;text-align:center}
 @media (min-width:900px){.small{text-align:left}}
+.random{display:flex;align-items:center;gap:9px;height:46px;padding:0 18px 0 14px;border-radius:99px;background:var(--deep);font-weight:700;font-size:16px;transition:transform .12s}
+.random:active{transform:scale(.95)}
+.random svg{width:22px;height:22px}
+.strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+@media (min-width:900px){.strip{justify-content:flex-start}}
+.chip{display:flex;align-items:center;gap:7px;height:32px;padding:0 12px 0 8px;border-radius:99px;background:var(--deep);font-weight:700;font-size:14px}
+.chip i{width:14px;height:14px;border-radius:50%}
+.chip b{font-stretch:80%;font-size:17px;font-weight:800}
+.kbd{font-size:14px;opacity:.75;margin:2px 0 0;line-height:1.5}
+.kbd b{display:inline-block;min-width:24px;padding:1px 6px;margin:0 2px;border-radius:6px;background:var(--deep);font-weight:700;font-size:13px;text-align:center}
+@media (pointer:coarse){.kbd{display:none}}
 
-/* split-flap number display */
+/* number mode */
 .flaps{display:flex;gap:10px;perspective:400px}
-.flap{position:relative;width:78px;height:100px;border-radius:14px;background:var(--deep);overflow:hidden;
-  box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
+.flap{position:relative;width:70px;height:88px;border-radius:14px;background:var(--deep);overflow:hidden;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
 .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--cobalt);opacity:.9}
-.flap span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-stretch:75%;font-size:80px;line-height:1;backface-visibility:hidden}
+.flap span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-stretch:75%;font-size:70px;line-height:1;backface-visibility:hidden}
 .flap span.empty{color:rgba(255,255,255,.22)}
-.flaps.bad{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
-@keyframes shake{20%,60%{transform:translateX(-9px)}40%,80%{transform:translateX(9px)}}
-
-/* keypad */
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:min(100%,300px)}
-.keys button{height:58px;border-radius:16px;background:var(--deep);font-weight:800;font-stretch:85%;font-size:26px;
-  box-shadow:0 4px 0 #0e1766;transition:transform .09s,box-shadow .09s,background .2s}
-.keys button.press,.keys button:active{transform:translateY(3px);box-shadow:0 1px 0 #0e1766;background:#2331a3}
+.keys button{height:54px;border-radius:16px;background:var(--deep);font-weight:800;font-stretch:85%;font-size:25px;
+  box-shadow:0 4px 0 var(--deeper);transition:transform .09s,box-shadow .09s,background .2s}
+.keys button.press,.keys button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--deeper);background:#2331a3}
 .keys .go{background:var(--mustard);color:var(--ink);box-shadow:0 4px 0 #a87b00}
 .keys .go.press,.keys .go:active{background:#ffc62b;box-shadow:0 1px 0 #a87b00}
 .keys svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
 .keys svg.fill{fill:currentColor;stroke:none}
-.kbd{font-size:14px;opacity:.75;margin:2px 0 0;line-height:1.4}
-.kbd b{display:inline-block;min-width:24px;padding:1px 6px;margin:0 2px;border-radius:6px;background:var(--deep);font-weight:700;font-size:13px;text-align:center}
-@media (pointer:coarse){.kbd{display:none}}
+@media (min-width:900px){.flap{width:78px;height:100px}.flap span{font-size:80px}.keys button{height:58px;font-size:26px}}
 
-/* intro sleeve */
+/* digital mode */
+.dwrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+@media (min-width:900px){.dwrap{align-items:flex-start}}
+.dtop{display:flex;align-items:flex-start;gap:14px;width:100%;justify-content:center}
+@media (min-width:900px){.dtop{justify-content:flex-start}}
+.dcard{--CW:min(52vw, calc(30svh * .7045), 230px);position:relative;width:var(--CW);aspect-ratio:62/88;perspective:1400px;border-radius:11px;flex:none}
+@media (min-width:900px){.dcard{--CW:min(270px, calc(54svh * .7045))}}
+.dcard .stack{position:absolute;inset:0;border-radius:11px;background:#1a2699;transform:translate(5px,5px) rotate(2.5deg);box-shadow:0 10px 26px rgba(8,12,70,.35)}
+.dcard .stack.s2{transform:translate(10px,9px) rotate(5deg);background:#16208a}
+.dcard.empty .stack{opacity:0}
+.dcard .inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.3,1.25,.45,1)}
+.dcard.flipped .inner{transform:rotateY(180deg)}
+.dcard .face{position:absolute;inset:0;border-radius:11px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 16px 36px rgba(8,12,70,.5)}
+.dcard .face img{width:100%;height:100%;display:block;-webkit-user-drag:none;user-select:none}
+.dcard .back{transform:rotateY(180deg)}
+.dcard .shine{position:absolute;inset:0;border-radius:11px;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 48%,transparent 62%);opacity:0}
+.qdots{display:flex;gap:6px;width:100%;max-width:400px}
+.qdots span{flex:1;height:30px;border-radius:10px;background:var(--deep);display:grid;place-items:center;font-size:13px;font-weight:700;color:#aab0e6;transition:background .3s,color .3s}
+.qdots span.now{background:#2b3bc4;color:#fff;box-shadow:inset 0 0 0 2px var(--mustard)}
+.qdots span.ok{background:var(--green);color:#fff}
+.qdots span.no{background:var(--red);color:#fff}
+.quiz{width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px}
+.quiz h3{margin:0;font-size:18px;font-weight:800}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.chips button,.opts button{border-radius:12px;background:var(--deep);font-weight:700;transition:background .25s,color .25s,transform .12s,opacity .25s}
+.chips button{height:44px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px}
+.chips button i{width:9px;height:9px;border-radius:50%;flex:none}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts button{min-height:54px;padding:8px 10px;font-size:14.5px;line-height:1.2;text-align:center;overflow-wrap:anywhere}
+.chips button:active,.opts button:active{transform:scale(.95)}
+.answered button{pointer-events:none}
+.answered button:not(.right):not(.wrong){background:#1b2795;color:#7f88c9}
+.answered button:not(.right):not(.wrong) i{opacity:.35}
+button.right{background:var(--green) !important;color:#fff !important}
+button.wrong{background:var(--red) !important;color:#fff !important}
+.typer{display:flex;gap:8px}
+.typer input{flex:1;min-width:0;height:52px;border-radius:14px;border:2px solid transparent;background:#fff;color:var(--ink);padding:0 14px;font-size:17px;font-weight:600}
+.typer input:focus{outline:none;border-color:var(--mustard)}
+.typer input.right{background:#dff5e6;border-color:var(--green)}
+.typer input.wrong{background:#fde3e3;border-color:var(--red)}
+.typer button{height:52px;padding:0 18px;border-radius:14px;background:var(--mustard);color:var(--ink);font-weight:800;font-size:16px}
+.skip{align-self:flex-start;font-size:14px;font-weight:600;text-decoration:underline;opacity:.8;padding:4px 0}
+.answer{font-size:15px;line-height:1.35;opacity:.95}
+.answer b{color:var(--mustard)}
+.dacts{display:flex;gap:10px;width:100%;max-width:400px}
+.dacts button{flex:1;height:52px;border-radius:99px;font-weight:800;font-size:17px;background:var(--deep);transition:transform .12s}
+.dacts button:active{transform:scale(.96)}
+.dacts .pri{background:var(--mustard);color:var(--ink);box-shadow:0 4px 0 #a87b00}
+.dscore{margin:0;font-size:14px;opacity:.8;text-align:center}
+@media (min-width:900px){.dscore{text-align:left}}
+
+/* ================= intro sleeve ================= */
 .sleeve{position:absolute;inset:0;z-index:4;background:var(--mustard);color:#101040;border-radius:4px;overflow:hidden;
   box-shadow:0 18px 40px rgba(10,15,80,.55);display:flex;flex-direction:column;justify-content:space-between;padding:calc(var(--D)*.07)}
-.sleeve[hidden]{display:none}
 .sleeve h1{margin:0;font-weight:800;font-stretch:75%;font-size:calc(var(--D)*.4);line-height:.8;letter-spacing:-.03em}
 .sleeve p{margin:0;font-weight:600;font-size:calc(var(--D)*.05);max-width:60%}
 .sleeve .bands{position:absolute;left:0;right:0;bottom:0;height:calc(var(--D)*.06);display:flex}
 .sleeve .bands i{flex:1}
 
-/* scanner */
-#scan{position:fixed;inset:0;background:#000;display:none;z-index:20}
+/* ================= scanner ================= */
+#scan{position:fixed;inset:0;background:#000;display:none;z-index:40}
 #scan.on{display:block}
 #scan video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #scan .frame{position:absolute;left:50%;top:44%;width:min(72vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);box-shadow:0 0 0 100vmax rgba(15,20,90,.66);border-radius:26px}
@@ -203,80 +251,95 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 #scan .msg{position:absolute;left:0;right:0;top:calc(44% + min(36vw,150px) + 28px);text-align:center;font-size:19px;font-weight:600;padding:0 24px}
 #scan .cancel{position:absolute;left:50%;bottom:calc(32px + env(safe-area-inset-bottom));transform:translateX(-50%);height:56px;padding:0 34px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
 
-/* settings sheet */
-.scrim{position:fixed;inset:0;background:rgba(8,12,70,.55);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
+/* ================= sheets ================= */
+.scrim{position:fixed;inset:0;background:rgba(8,12,70,.6);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
 .scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--deep);border-radius:28px 28px 0 0;padding:26px 24px calc(26px + env(safe-area-inset-bottom));
-  transform:translateY(105%);transition:transform .42s cubic-bezier(.2,1.1,.3,1);max-width:560px;margin:0 auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--deep);border-radius:26px 26px 0 0;padding:24px 20px calc(22px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .42s cubic-bezier(.2,1.1,.3,1);max-width:560px;margin:0 auto;max-height:88svh;overflow-y:auto}
 .sheet.on{transform:none}
-.sheet h2{margin:0 0 20px;font-size:28px;font-weight:800;font-stretch:75%}
-.row{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}
-.row b{display:block;font-size:18px;font-weight:700}
-.row small{display:block;font-size:15px;opacity:.75;margin-top:3px;line-height:1.35}
+.sheet h2{margin:0 0 18px;font-size:27px;font-weight:800;font-stretch:75%}
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}
+.row b{display:block;font-size:17px;font-weight:700}
+.row small{display:block;font-size:14px;opacity:.75;margin-top:3px;line-height:1.35}
 .sw{position:relative;flex:none;width:58px;height:34px}
 .sw input{position:absolute;inset:0;opacity:0;margin:0;width:100%;height:100%;cursor:pointer}
 .sw span{position:absolute;inset:0;border-radius:99px;background:#3b4bb6;transition:background .2s;pointer-events:none}
 .sw span::before{content:"";position:absolute;width:26px;height:26px;left:4px;top:4px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
 .sw input:checked+span{background:var(--mustard)}
 .sw input:checked+span::before{transform:translateX(24px);background:var(--deep)}
-.sw input:focus-visible+span{outline:3px solid #fff;outline-offset:3px}
-.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0 26px}
-.seg button{height:50px;border-radius:14px;background:#2331a3;font-weight:700;font-size:16px;transition:background .15s,color .15s,transform .12s}
+.sheet .lbl{font-size:17px;font-weight:700;display:block}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0 22px}
+.seg.two{grid-template-columns:1fr 1fr}
+.seg button{height:48px;border-radius:13px;background:#2331a3;font-weight:700;font-size:15px;transition:background .15s,color .15s,transform .12s}
 .seg button:active{transform:scale(.96)}
 .seg button[aria-pressed=true]{background:var(--mustard);color:var(--ink)}
-.random{display:flex;align-items:center;gap:9px;height:46px;padding:0 18px 0 14px;border-radius:99px;background:var(--deep);font-weight:700;font-size:16px;transition:transform .12s}
-.random:active{transform:scale(.95)}
-.random svg{width:24px;height:24px}
-.hdr-r{justify-self:end;display:flex;gap:8px}
-.gear.score-btn svg{stroke-width:2.2}
-.strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:0}
-@media (min-width:900px){.strip{justify-content:flex-start}}
-.chip{display:flex;align-items:center;gap:7px;height:32px;padding:0 12px 0 8px;border-radius:99px;background:var(--deep);font-weight:700;font-size:14px}
-.chip i{width:14px;height:14px;border-radius:50%}
-.chip b{font-stretch:80%;font-size:17px;font-weight:800}
-.teams{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
-.team{display:grid;grid-template-columns:14px 1fr 46px 64px 46px;align-items:center;gap:10px;background:#2331a3;border-radius:16px;padding:8px 10px 8px 14px;position:relative}
-.team .dot{width:14px;height:14px;border-radius:50%}
-.team input{min-width:0;background:none;border:0;color:#fff;font:inherit;font-size:17px;font-weight:700;padding:6px 0;border-bottom:2px solid transparent}
+.teams{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.team{display:grid;grid-template-columns:12px 1fr 44px 54px 44px;align-items:center;gap:8px;background:#2331a3;border-radius:16px;padding:8px 8px 8px 12px}
+.team .dot{width:12px;height:12px;border-radius:50%}
+.team input{min-width:0;background:none;border:0;color:#fff;font-size:17px;font-weight:700;padding:6px 0;border-bottom:2px solid transparent}
 .team input:focus{outline:none;border-bottom-color:var(--mustard)}
-.team .pts{position:relative;text-align:center;font-weight:800;font-stretch:75%;font-size:38px;line-height:1;overflow:visible}
-.team button{width:46px;height:46px;border-radius:14px;background:var(--deep);font-size:26px;font-weight:800;line-height:1}
+.team .pts{position:relative;text-align:center;font-weight:800;font-stretch:75%;font-size:34px;line-height:1}
+.team button{width:44px;height:44px;border-radius:13px;background:var(--deep);font-size:24px;font-weight:800;line-height:1}
 .team button.plus{background:var(--mustard);color:var(--ink)}
 .float{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-weight:800;font-size:18px;color:var(--mustard);pointer-events:none}
-.sheet-row{display:flex;gap:10px;margin-bottom:14px}
-.sheet-row button{flex:1;height:50px;border-radius:14px;background:#2331a3;font-weight:700;font-size:16px}
-.done{width:100%;height:56px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
+.sheet-row{display:flex;gap:10px;margin-bottom:12px}
+.sheet-row button{flex:1;height:48px;border-radius:14px;background:#2331a3;font-weight:700;font-size:15px}
+.done-btn{width:100%;height:54px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
+
+/* ================= guide ================= */
+.guide{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(10,16,90,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gbox{position:relative;width:min(100%,440px);max-height:calc(100svh - 32px);overflow-y:auto;background:var(--paper,#f3f3ee);color:var(--ink);border-radius:26px;padding:50px 22px 18px;box-shadow:0 30px 80px rgba(5,8,50,.6)}
+.gslide{display:flex;flex-direction:column;gap:12px}
+.gart{height:150px;border-radius:18px;background:var(--cobalt);position:relative;overflow:hidden;display:grid;place-items:center}
+.gbox h2{margin:4px 0 0;font-size:26px;font-weight:800;font-stretch:80%;color:var(--cobalt);line-height:1.05}
+.gbox p{margin:0;font-size:16px;line-height:1.45}
+.gmodes{display:flex;flex-direction:column;gap:9px}
+.gmode{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:#e6e8f5}
+.gmode b{display:block;font-size:16px;color:var(--cobalt)}
+.gmode span{font-size:14.5px;line-height:1.35}
+.gmode .gi{width:38px;height:38px;border-radius:12px;background:var(--cobalt);display:grid;place-items:center;flex:none}
+.gmode .gi svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gnav{display:flex;align-items:center;gap:10px;margin-top:16px}
+.gdots{display:flex;gap:6px;flex:1}
+.gdots i{width:8px;height:8px;border-radius:4px;background:#c7cbe6;transition:width .3s,background .3s}
+.gdots i.on{width:22px;background:var(--cobalt)}
+.gnav button{height:46px;padding:0 20px;border-radius:99px;font-weight:800;font-size:16px}
+.gnav .gnext{background:var(--cobalt);color:#fff}
+.gnav .gback{color:var(--cobalt)}
+.gskip{position:absolute;top:14px;right:16px;font-weight:700;font-size:14px;color:var(--cobalt);opacity:.8;z-index:2}
+.gpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gpick button{height:84px;border-radius:16px;background:var(--cobalt);color:#fff;font-weight:800;font-size:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.gpick svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.art-disc{width:120px;height:120px;border-radius:50%;background:repeating-radial-gradient(circle,#0b0b10 0 1.4px,#17171f 1.4px 2.8px);position:relative;animation:spin 2.4s linear infinite;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.art-disc::after{content:"";position:absolute;inset:32%;border-radius:50%;background:var(--mustard)}
+.art-flip{width:84px;height:118px;perspective:600px}
+.art-flip div{width:100%;height:100%;border-radius:8px;background:var(--mustard);animation:gflip 3s ease-in-out infinite;transform-style:preserve-3d;display:grid;place-items:center;font-weight:800;font-stretch:75%;font-size:34px;color:var(--deep)}
+@keyframes gflip{0%,35%{transform:rotateY(0)}50%,85%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+.art-icons{display:flex;gap:16px}
+.art-icons span{width:58px;height:58px;border-radius:16px;background:var(--deep);display:grid;place-items:center}
+.art-icons svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
 
 #yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 
 @media (prefers-reduced-motion:reduce){
-  .stage.on .rings i,.eq i{animation:none}
-  .sheet,.scrim,.modes .pill,.eq{transition:none}
-}
-@media (max-width:899px){ body.m-nummer{--D:min(58vw,26svh,330px)} body.m-nummer main{gap:12px} body.m-nummer .eq{margin-top:10px;height:22px} }
-@media (max-height:740px) and (max-width:899px){
-  .flap{width:60px;height:76px}.flap span{font-size:60px}
-  .keys button{height:48px;font-size:22px}
-  .eq{height:22px}
+  .stage.on .rings i,.eq i,.art-disc,.art-flip div,.mini .md.on{animation:none}
+  .sheet,.scrim,.modes .pill,.eq,.dcard .inner{transition:none}
 }
 </style>
 </head>
 <body>
 <header class="pre" id="head">
   <span class="mark">Tidslåt</span>
-  <div class="modes" id="modes" role="group" aria-label="Hvordan velger du kort?">
+  <div class="modes" id="modes" role="group" aria-label="Hvordan vil du spille?">
     <span class="pill" id="pill"></span>
     <button data-mode="skann" aria-pressed="false">Skann</button>
     <button data-mode="nummer" aria-pressed="false">Nummer</button>
     <button data-mode="digital" aria-pressed="false">Digital</button>
   </div>
-  <div class="hdr-r">
-    <button class="gear score-btn" id="scoreBtn" aria-label="Poengtavle">
-      <svg viewBox="0 0 24 24"><path d="M4 20V13h5v7M9 20V8h6v12M15 20v-5h5v5"/><path d="M3 20h18"/></svg>
-    </button>
-    <button class="gear" id="gear" aria-label="Innstillinger">
-      <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>
-    </button>
+  <div class="icons">
+    <button class="icon" id="helpBtn" aria-label="Slik virker siden"><b>?</b></button>
+    <button class="icon" id="scoreBtn" aria-label="Poengtavle"><svg viewBox="0 0 24 24"><path d="M4 20V13h5v7M9 20V8h6v12M15 20v-5h5v5"/><path d="M3 20h18"/></svg></button>
+    <button class="icon" id="gear" aria-label="Innstillinger"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg></button>
   </div>
 </header>
 
@@ -304,10 +367,15 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
         <div class="bands"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
       </div>
     </div>
-    <div class="eq pre" id="eq" aria-hidden="true"><i style="animation-duration:.62s"></i><i style="animation-duration:.94s"></i><i style="animation-duration:.51s"></i><i style="animation-duration:.78s"></i><i style="animation-duration:1.05s"></i><i style="animation-duration:.58s"></i><i style="animation-duration:.86s"></i><i style="animation-duration:.69s"></i><i style="animation-duration:.98s"></i></div>
+    <div class="eq" id="eq" aria-hidden="true"><i style="animation-duration:.62s"></i><i style="animation-duration:.94s"></i><i style="animation-duration:.51s"></i><i style="animation-duration:.78s"></i><i style="animation-duration:1.05s"></i><i style="animation-duration:.58s"></i><i style="animation-duration:.86s"></i><i style="animation-duration:.69s"></i><i style="animation-duration:.98s"></i></div>
   </div>
 
   <div class="panel pre" id="panel">
+    <div class="mini" id="mini" hidden>
+      <span class="md" id="miniDisc" data-n="–"></span>
+      <span class="mt"><b id="miniTitle">Ingen låt ennå</b><span id="miniSub">Trekk et kort for å starte</span><span class="mbar"><i id="miniBar"></i></span></span>
+      <button class="mp" id="miniPlay" aria-label="Spill av eller pause"><svg viewBox="0 0 24 24" id="miniIcon"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
     <p class="status" id="status" aria-live="polite">Velg et kort for å starte.</p>
     <div class="strip" id="strip"></div>
     <div class="views">
@@ -318,23 +386,6 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
         </button>
         <p class="small">Hold QR-koden på kortet foran kameraet.</p>
         <button class="random" data-random><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Tilfeldig kort</button>
-      </div>
-      <div class="view" id="view-digital" hidden>
-        <div class="dwrap">
-          <button class="dcard empty" id="dcard" aria-label="Snu kortet">
-            <span class="stack s2"></span><span class="stack"></span>
-            <span class="inner">
-              <span class="face front"><img id="dfront" src="c/decka.webp" alt="Forsiden av kortet"></span>
-              <span class="face back"><img id="dback" src="c/deckb.webp" alt="Fasiten på baksiden"></span>
-            </span>
-            <span class="shine" id="dshine"></span>
-          </button>
-          <p class="dq" id="dq">Hvilket tiår er låta fra?</p>
-          <div class="chips" id="chips"></div>
-          <div class="dacts" id="dacts"></div>
-          <p class="dscore" id="dscore"></p>
-          <p class="kbd">Tast <b>1</b>–<b>8</b> for tiår, <b>Enter</b> snur kortet, <b>→</b> neste, <b>mellomrom</b> pauser.</p>
-        </div>
       </div>
       <div class="view" id="view-nummer" hidden>
         <div class="flaps" id="flaps" aria-live="polite" aria-label="Kortnummer">
@@ -352,9 +403,30 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
         <button class="random" data-random><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Tilfeldig kort</button>
         <p class="kbd">Skriv nummeret på tastaturet. <b>Enter</b> spiller, <b>mellomrom</b> pauser, <b>T</b> gir et tilfeldig kort.</p>
       </div>
+      <div class="view" id="view-digital" hidden>
+        <div class="dwrap">
+          <div class="dtop">
+            <button class="dcard empty" id="dcard" aria-label="Snu kortet">
+              <span class="stack s2"></span><span class="stack"></span>
+              <span class="inner">
+                <span class="face front"><img id="dfront" src="c/decka.webp" alt="Forsiden av kortet"></span>
+                <span class="face back"><img id="dback" src="c/deckb.webp" alt="Fasiten på baksiden"></span>
+              </span>
+              <span class="shine" id="dshine"></span>
+            </button>
+          </div>
+          <div class="qdots" id="qdots" hidden><span data-q="0">Tiår</span><span data-q="1">Artist</span><span data-q="2">Låt</span></div>
+          <div class="quiz" id="quiz"></div>
+          <div class="dacts" id="dacts"></div>
+          <p class="dscore" id="dscore"></p>
+          <p class="kbd">Tast <b>1</b>–<b>8</b> for tiår og <b>1</b>–<b>4</b> for svar. <b>Enter</b> neste, <b>mellomrom</b> pauser.</p>
+        </div>
+      </div>
     </div>
   </div>
 </main>
+
+<div class="foot-bands" aria-hidden="true"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
 
 <div id="scan" role="dialog" aria-label="Skann kort">
   <video id="video" playsinline muted></video>
@@ -370,49 +442,60 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
     <div><b>Start et tilfeldig sted</b><small>Du hører ikke introen. Vanskeligere.</small></div>
     <label class="sw"><input type="checkbox" id="optRandom" aria-label="Start et tilfeldig sted"><span></span></label>
   </div>
-  <b style="font-size:18px">Spilletid</b>
+  <span class="lbl">Spilletid</span>
   <div class="seg" id="seg">
-    <button data-len="10">10 sek</button><button data-len="20">20 sek</button><button data-len="30">30 sek</button><button data-len="60">60 sek</button><button data-len="0">Hele</button>
+    <button data-len="10">10 s</button><button data-len="20">20 s</button><button data-len="30">30 s</button><button data-len="60">60 s</button><button data-len="0">Hele</button>
   </div>
-  <button class="done" id="done">Ferdig</button>
+  <span class="lbl">Svar i digital modus</span>
+  <div class="seg two" id="segAns">
+    <button data-ans="choose">Velg blant fire</button><button data-ans="type">Skriv selv</button>
+  </div>
+  <button class="done-btn" id="done">Ferdig</button>
 </div>
-
 <div class="sheet" id="scoreSheet" role="dialog" aria-label="Poengtavle" aria-hidden="true">
   <h2>Poengtavle</h2>
   <div class="teams" id="teams"></div>
   <div class="sheet-row"><button id="addTeam">Legg til lag</button><button id="resetScore">Nullstill poeng</button></div>
-  <button class="done" id="scoreDone">Ferdig</button>
+  <button class="done-btn" id="scoreDone">Ferdig</button>
 </div>
 
-<div class="foot-bands" aria-hidden="true"><i style="background:#d6333a"></i><i style="background:#ed7821"></i><i style="background:#edb31a"></i><i style="background:#dc3389"></i><i style="background:#8545c7"></i><i style="background:#2e6be0"></i><i style="background:#129e9e"></i><i style="background:#38a854"></i></div>
+<div class="guide" id="guide" hidden role="dialog" aria-label="Slik virker Tidslåt">
+  <div class="gbox" id="gbox">
+    <button class="gskip" id="gskip">Hopp over</button>
+    <div id="gslides"></div>
+    <div class="gnav"><div class="gdots" id="gdots"></div><button class="gback" id="gback">Tilbake</button><button class="gnext" id="gnext">Neste</button></div>
+  </div>
+</div>
+
 <div id="yt-wrap"><div id="yt"></div></div>
 <canvas id="canvas" hidden></canvas>
 
 <script src="jsQR.js"></script>
 <script>
-// Kortnummer -> YouTube-ID. Ingen titler eller artister finnes på siden.
+// Kortnummer -> YouTube-ID, reserver, og fasit (kodet) til digital modus.
 const CARDS = {"1": "Y-9Y4CCIWnM", "2": "ZgdufzXvjqw", "3": "nrigbqKUWtk", "4": "gj0Rz-uP4Mk", "5": "_DGATUBGzYo", "6": "9iayJ8u4Qew", "7": "WGoDaYjdfSg", "8": "MMFj8uDubsE", "9": "VtXl8xAPAtA", "10": "QkF3oxziUI4", "11": "fJ9rUzIMcZQ", "12": "aBKEt3MhNMM", "13": "xFrGuyw1V8s", "14": "yqrAPOZxgzU", "15": "9jK-NcRmVcw", "16": "djV11Xbc914", "17": "Zi_XLOBDo_Y", "18": "PCrnwywJrKg", "19": "182f6dTagkU", "20": "rog8ou-ZepE", "21": "hTWKbfoikeg", "22": "4fndeDfaWCg", "23": "gJLIiF15wjQ", "24": "bx1Bh8ZvH84", "25": "CduA0TULnow", "26": "Co0tTeuUVhU", "27": "IcrbM1l_BoI", "28": "nfWlot6h_JM", "29": "A_MjCqQoLLA", "30": "siO6dkqidc4", "31": "EzU0ofo3jOs", "32": "_ydMlTassYc", "33": "SR6iYWJxHqs", "34": "BkFBGDz2rrk"};
-// Reserve versions if YouTube won't play the first one outside YouTube.
-const ALT = {"1": ["TReqmJ7iX2M", "aKCt8ssC7cs"], "18": ["79fzeNUqQbQ", "IaHQYTm14Kc"]};
-// Decade per card, only used to check a guess in Digital mode.
-const DEC = JSON.parse(atob('eyIxIjogIjUwIiwgIjIiOiAiNTAiLCAiMyI6ICI1MCIsICI0IjogIjUwIiwgIjUiOiAiNjAiLCAiNiI6ICI2MCIsICI3IjogIjYwIiwgIjgiOiAiNjAiLCAiOSI6ICI2MCIsICIxMCI6ICI3MCIsICIxMSI6ICI3MCIsICIxMiI6ICI3MCIsICIxMyI6ICI3MCIsICIxNCI6ICI3MCIsICIxNSI6ICI4MCIsICIxNiI6ICI4MCIsICIxNyI6ICI4MCIsICIxOCI6ICI4MCIsICIxOSI6ICI4MCIsICIyMCI6ICI4MCIsICIyMSI6ICI5MCIsICIyMiI6ICI5MCIsICIyMyI6ICI5MCIsICIyNCI6ICI5MCIsICIyNSI6ICIwMCIsICIyNiI6ICIwMCIsICIyNyI6ICIxMCIsICIyOCI6ICIxMCIsICIyOSI6ICI2MCIsICIzMCI6ICI4MCIsICIzMSI6ICIwMCIsICIzMiI6ICIwMCIsICIzMyI6ICIxMCIsICIzNCI6ICIyMCJ9'));
+const ALT = {"1": ["TReqmJ7iX2M", "aKCt8ssC7cs", "kSCpu-Jp4OU"], "2": ["-Hlbn3O7Rpo", "hzYBEJgKjv0", "VsAlSuEG26A"], "3": ["AeZRYhLDLeU", "s_NLlOiD1Wo", "zVIX6rN79oQ"], "4": ["PpsUOOfb-vE", "Dk-jukA7PsM", "cl6qrdZoGHY"], "5": ["v1HDt1tknTc", "KjSy6hNwFno", "Lr59zm006GY"], "6": ["JzqGZjFnYnA", "U0yIf9Tkgu4", "F_97DmMUl-k"], "7": ["E8E11gM5Huo", "ZVqG0g0lqYU", "fGeTDLv6ti0"], "8": ["GjmG0tsvff0", "kMLm6ti4e10", "FJoItwNXcoc"], "9": ["xwwABrNLvFs", "R7dQjOCLQI8", "QlgNMZnLsIQ"], "10": ["X791IzOwt3Q", "SosGmJm-GJ0", "RvMxA5C-3x0"], "11": ["xG16sdjLtc0", "GR1G2rl8GGY", "V8QqZ0Qb3U8"], "12": ["ldMBytWjpJ0", "t365MuktYQs", "h9tPn70Hq8Y"], "13": ["P5AqvKYYQEE", "n1eSiygZR4Q", "A8JyEvvlBB8"], "14": ["TlrvTKhdX9k", "g-38GX2YQig", "n4aitHz68Y8"], "15": ["4hj8M8XZpis", "bTkWoiG4Nyw", "aLbTcEr6E9A"], "16": ["MIgK3zOk0zg", "JLyTfOZp8oM", "NaQ083rNUwc"], "17": ["Kr4EQDVETuA", "p1ct1plRUtw", "OZGtRvYF-A4"], "18": ["zz_yJrQ5u5o", "IaHQYTm14Kc", "79fzeNUqQbQ"], "19": ["GiRE7LhiXaM", "s3wNuru4U0I", "pp2mlxsxOes"], "20": ["8819CVkxKPk", "GOQtzxPnoY0", "AqYFGwKqhVw"], "21": ["_rjTqFyWnug", "q8sGURLcGK4", "lVkUZh7Jj-0"], "22": ["-aKJE1lanQk", "z6Wq59qrdB0", "T_cnnhd_ZlA"], "23": ["tTZDHlnTgR0", "1fDFCmhD8_Y", "WEQveK3_o6s"], "24": ["FVdjZYfDuLE", "q_c6hQD7aAw", "PoJh4JNedns"], "25": ["OO0aTOIU_3w", "3cmpHJkRzbU", "BUHdrfis5K0"], "26": ["p42ZPTgmrnY", "xk9EuEwMKcM", "xheuZhFEuDA"], "27": ["fE96CxPls5A", "a3Klv0p2f74", "BBP_GrLCY38"], "28": ["H59xVMF4zxE", "w9E7tRTkf5E", "9M-h3AthyMU"], "29": ["mQER0A0ej0M", "uNv_Bu_L6C8", "RhfHed14cNc"], "30": ["aev1nt-5_9M", "hb0jH0ce1NQ", "UbmQ5uX0QX4"], "31": ["LQ488QrqGE4", "MW3EyVNNCI4", "lm-8NaFdpO8"], "32": ["183mZ-wj7eA", "vk6014HuxcE", "GSPTsZiYboA"], "33": ["yq1Xp52ueRk", "LAW5JibpkTY", "5cBhVc83vTE"], "34": ["c5eu02fLI60", "2MDlzySds4Q", "u9t1unQJIV4"]};
+const INFO = JSON.parse(decodeURIComponent(escape(atob('eyIxIjogWyJKb2hubnkgQi4gR29vZGUiLCAiQ2h1Y2sgQmVycnkiLCAiNTAiXSwgIjIiOiBbIlJvY2sgQXJvdW5kIHRoZSBDbG9jayIsICJCaWxsIEhhbGV5ICYgSGlzIENvbWV0cyIsICI1MCJdLCAiMyI6IFsiRm9sc29tIFByaXNvbiBCbHVlcyIsICJKb2hubnkgQ2FzaCIsICI1MCJdLCAiNCI6IFsiSmFpbGhvdXNlIFJvY2siLCAiRWx2aXMgUHJlc2xleSIsICI1MCJdLCAiNSI6IFsiSSBXYW50IHRvIEhvbGQgWW91ciBIYW5kIiwgIlRoZSBCZWF0bGVzIiwgIjYwIl0sICI2IjogWyJSZXNwZWN0IiwgIkFyZXRoYSBGcmFua2xpbiIsICI2MCJdLCAiNyI6IFsiUHVycGxlIEhhemUiLCAiSmltaSBIZW5kcml4IiwgIjYwIl0sICI4IjogWyJCbG93aW4nIGluIHRoZSBXaW5kIiwgIkJvYiBEeWxhbiIsICI2MCJdLCAiOSI6IFsiU2d0LiBQZXBwZXIncyBMb25lbHkgSGVhcnRzIENsdWIgQmFuZCIsICJUaGUgQmVhdGxlcyIsICI2MCJdLCAiMTAiOiBbIlN0YWlyd2F5IHRvIEhlYXZlbiIsICJMZWQgWmVwcGVsaW4iLCAiNzAiXSwgIjExIjogWyJCb2hlbWlhbiBSaGFwc29keSIsICJRdWVlbiIsICI3MCJdLCAiMTIiOiBbIlN0YXJtYW4iLCAiRGF2aWQgQm93aWUiLCAiNzAiXSwgIjEzIjogWyJEYW5jaW5nIFF1ZWVuIiwgIkFCQkEiLCAiNzAiXSwgIjE0IjogWyJHb2QgU2F2ZSB0aGUgUXVlZW4iLCAiU2V4IFBpc3RvbHMiLCAiNzAiXSwgIjE1IjogWyJUaGUgRmluYWwgQ291bnRkb3duIiwgIkV1cm9wZSIsICI4MCJdLCAiMTYiOiBbIlRha2UgT24gTWUiLCAiYS1oYSIsICI4MCJdLCAiMTciOiBbIkJpbGxpZSBKZWFuIiwgIk1pY2hhZWwgSmFja3NvbiIsICI4MCJdLCAiMTgiOiBbIkxpa2UgYSBQcmF5ZXIiLCAiTWFkb25uYSIsICI4MCJdLCAiMTkiOiBbIldlIEFyZSB0aGUgV29ybGQiLCAiVVNBIGZvciBBZnJpY2EiLCAiODAiXSwgIjIwIjogWyJJY2UgSWNlIEJhYnkiLCAiVmFuaWxsYSBJY2UiLCAiODAiXSwgIjIxIjogWyJTbWVsbHMgTGlrZSBUZWVuIFNwaXJpdCIsICJOaXJ2YW5hIiwgIjkwIl0sICIyMiI6IFsiSSBXYW50IEl0IFRoYXQgV2F5IiwgIkJhY2tzdHJlZXQgQm95cyIsICI5MCJdLCAiMjMiOiBbIldhbm5hYmUiLCAiU3BpY2UgR2lybHMiLCAiOTAiXSwgIjI0IjogWyJXb25kZXJ3YWxsIiwgIk9hc2lzIiwgIjkwIl0sICIyNSI6IFsiT29wcyEuLi4gSSBEaWQgSXQgQWdhaW4iLCAiQnJpdG5leSBTcGVhcnMiLCAiMDAiXSwgIjI2IjogWyJIZWFydGxlc3MiLCAiS2FueWUgV2VzdCIsICIwMCJdLCAiMjciOiBbIldha2UgTWUgVXAiLCAiQXZpY2lpIiwgIjEwIl0sICIyOCI6IFsiU2hha2UgSXQgT2ZmIiwgIlRheWxvciBTd2lmdCIsICIxMCJdLCAiMjkiOiBbIkhleSBKdWRlIiwgIlRoZSBCZWF0bGVzIiwgIjYwIl0sICIzMCI6IFsiVGhlcmUgSXMgYSBMaWdodCBUaGF0IE5ldmVyIEdvZXMgT3V0IiwgIlRoZSBTbWl0aHMiLCAiODAiXSwgIjMxIjogWyJIb21lY29taW5nIiwgIkthbnllIFdlc3QgZnQuIENocmlzIE1hcnRpbiIsICIwMCJdLCAiMzIiOiBbIkVtcGlyZSBTdGF0ZSBvZiBNaW5kIiwgIkpheS1aIGZ0LiBBbGljaWEgS2V5cyIsICIwMCJdLCAiMzMiOiBbIkdyZW5hZGUiLCAiQnJ1bm8gTWFycyIsICIxMCJdLCAiMzQiOiBbIlNvIEdvb2QiLCAiYnVuaWkiLCAiMjAiXX0='))));   // { nr: [tittel, artist, tiår] }
 
 const $ = id => document.getElementById(id);
 const stage = $('stage'), deck = $('deck'), disc = $('disc'), discBtn = $('discBtn'), wobble = $('wobble'),
       arm = $('arm'), label = $('label'), statusEl = $('status'), ringBar = $('ringBar');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const desktop = () => matchMedia('(min-width:900px)').matches;
+const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const store = {
   get(k, d){ try{ const v = localStorage.getItem('tidslat.'+k); return v===null?d:JSON.parse(v);}catch(e){return d;} },
   set(k, v){ try{ localStorage.setItem('tidslat.'+k, JSON.stringify(v)); }catch(e){} }
 };
-const anim = (el, kf, opt) => reduce ? null : el.animate(kf, opt);
+const anim = (el, kf, opt) => (reduce || !el) ? null : el.animate(kf, opt);
+const pad2 = n => String(n).padStart(2, '0');
 function say(t){
   if (statusEl.textContent === t) return;
   statusEl.textContent = t;
   anim(statusEl, [{opacity:0, transform:'translateY(6px)'},{opacity:1, transform:'none'}], {duration:280, easing:'ease-out'});
 }
 
-/* ---------- vinyl spin with spin-up / wind-down ---------- */
+/* ---------- vinyl spin ---------- */
 const spin = disc.animate([{transform:'rotate(0)'},{transform:'rotate(360deg)'}], {duration:1800, iterations:Infinity});
 spin.pause();
 let rate = 0, rateRaf = null;
@@ -433,131 +516,108 @@ function rampTo(target, ms){
 const PX = 1.06, PY = 0.04, L = 0.92;
 function angleFor(r){
   let lo = 0, hi = 70;
-  for (let i = 0; i < 40; i++) {
-    const m = (lo + hi) / 2, a = m * Math.PI / 180;
-    const d = Math.hypot(PX - L * Math.sin(a) - .5, PY + L * Math.cos(a) - .5);
-    d > r ? lo = m : hi = m;
-  }
+  for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2, a = m * Math.PI / 180;
+    const d = Math.hypot(PX - L * Math.sin(a) - .5, PY + L * Math.cos(a) - .5); d > r ? lo = m : hi = m; }
   return (lo + hi) / 2;
 }
 const A_REST = 3, A_OUT = angleFor(.455), A_IN = angleFor(.215);
-function setArm(deg, ms, ease){
-  arm.style.transition = `transform ${ms}ms ${ease || 'cubic-bezier(.45,0,.2,1)'}`;
-  arm.style.transform = `rotate(${deg}deg)`;
-}
+let armDropping = false;
+function setArm(deg, ms, ease){ arm.style.transition = `transform ${ms}ms ${ease || 'cubic-bezier(.45,0,.2,1)'}`; arm.style.transform = `rotate(${deg}deg)`; }
 setArm(A_REST, 0);
 function needleDrop(){
-  // swing over with a little overshoot, then the record dips as the needle lands
-  setArm(armAngle(), 900, 'cubic-bezier(.3,1.45,.55,1)');
-  setTimeout(() => anim(wobble, [{transform:'none'},{transform:'scale(.982) rotateX(4deg)'},{transform:'none'}], {duration:360, easing:'ease-out'}), 620);
+  armDropping = true; setArm(armAngle(), 900, 'cubic-bezier(.3,1.45,.55,1)');
+  setTimeout(() => { armDropping = false; anim(wobble, [{transform:'none'},{transform:'scale(.982)'},{transform:'none'}], {duration:360, easing:'ease-out'}); }, 650);
 }
 
-/* ---------- state ---------- */
+/* ---------- play state ---------- */
 let player = null, ready = false, current = null, pendingId = null, wantPlay = false;
 let clipStart = 0, seeked = false, tick = null, playing = false, ended = false;
+let curId = null, altIdx = 0, retries = 0;
+const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
 function setPlaying(on){
   playing = on;
   stage.classList.toggle('on', on); deck.classList.toggle('on', on);
+  $('miniDisc').classList.toggle('on', on);
+  $('miniIcon').innerHTML = on ? PAUSE : PLAY;
   rampTo(on ? 1 : 0, on ? 900 : 1100);
-  $('goIcon').innerHTML = on && !buf ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+  $('goIcon').innerHTML = on && !buf ? PAUSE : PLAY;
 }
-function setRing(p){ ringBar.style.strokeDashoffset = String(100 - Math.max(0, Math.min(1, p)) * 100); }
+function setRing(p){ p = Math.max(0, Math.min(1, p)); ringBar.style.strokeDashoffset = String(100 - p * 100); $('miniBar').style.width = (p * 100) + '%'; }
 
-/* ---------- settings ---------- */
-const sheet = $('sheet'), scrim = $('scrim');
-$('optRandom').checked = store.get('random', false);
-$('optRandom').onchange = e => store.set('random', e.target.checked);
-function markLen(){ const v = store.get('len', 30); document.querySelectorAll('#seg button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.len === v))); }
-markLen();
-$('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('len', +b.dataset.len); markLen();
-  anim(b, [{transform:'scale(.9)'},{transform:'scale(1.06)'},{transform:'none'}], {duration:320}); };
+/* ---------- sheets ---------- */
+const sheet = $('sheet'), scoreSheet = $('scoreSheet'), scrim = $('scrim');
 let openEl = null;
 function openSheet(on, el){
-  el = el || sheet;
-  if (on) { openEl = el; } else { el = openEl || sheet; openEl = null; }
+  el = on ? el : (openEl || sheet);
+  if (on) openEl = el; else openEl = null;
   el.classList.toggle('on', on); scrim.classList.toggle('on', on); el.setAttribute('aria-hidden', String(!on));
-  if (!on) (el === sheet ? $('gear') : $('scoreBtn')).focus({preventScroll:true});
 }
 $('gear').onclick = () => openSheet(true, sheet);
 $('done').onclick = $('scoreDone').onclick = scrim.onclick = () => openSheet(false);
+$('optRandom').checked = store.get('random', false);
+$('optRandom').onchange = e => store.set('random', e.target.checked);
+function markSeg(){
+  const v = store.get('len', 30); document.querySelectorAll('#seg button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.len === v)));
+  const a = store.get('answer', 'choose'); document.querySelectorAll('#segAns button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ans === a)));
+}
+markSeg();
+$('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('len', +b.dataset.len); markSeg(); anim(b, [{transform:'scale(.9)'},{transform:'scale(1.06)'},{transform:'none'}], {duration:300}); };
+$('segAns').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('answer', b.dataset.ans); markSeg(); anim(b, [{transform:'scale(.9)'},{transform:'scale(1.04)'},{transform:'none'}], {duration:300}); };
 
 /* ---------- scoreboard ---------- */
 const TEAM_COLS = ['#f4b400', '#dc3389', '#129e9e', '#ed7821'];
 let teams = store.get('teams', [{name:'Lag 1', pts:0}, {name:'Lag 2', pts:0}]);
 const saveTeams = () => store.set('teams', teams);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 function renderStrip(){
-  const st = $('strip');
   const used = teams.some(t => t.pts !== 0);
-  st.innerHTML = used ? teams.map((t, i) => `<button class="chip" data-i="${i}"><i style="background:${TEAM_COLS[i]}"></i>${t.name.replace(/[<&]/g, '')}<b>${t.pts}</b></button>`).join('') : '';
+  $('strip').innerHTML = used ? teams.map((t, i) => `<button class="chip"><i style="background:${TEAM_COLS[i]}"></i>${esc(t.name)}<b>${t.pts}</b></button>`).join('') : '';
 }
 function renderTeams(){
-  $('teams').innerHTML = teams.map((t, i) => `
-    <div class="team" data-i="${i}">
-      <span class="dot" style="background:${TEAM_COLS[i]}"></span>
-      <input value="${t.name.replace(/"/g, '&quot;')}" aria-label="Navn på lag ${i + 1}" maxlength="14">
-      <button class="minus" aria-label="Ett poeng mindre">−</button>
-      <span class="pts">${t.pts}</span>
-      <button class="plus" aria-label="Ett poeng mer">+</button>
-    </div>`).join('');
-  $('addTeam').disabled = teams.length >= 4; $('addTeam').style.opacity = teams.length >= 4 ? .4 : 1;
+  $('teams').innerHTML = teams.map((t, i) => `<div class="team" data-i="${i}"><span class="dot" style="background:${TEAM_COLS[i]}"></span>
+    <input value="${esc(t.name)}" aria-label="Navn på lag ${i + 1}" maxlength="14"><button class="minus" aria-label="Ett poeng mindre">−</button>
+    <span class="pts">${t.pts}</span><button class="plus" aria-label="Ett poeng mer">+</button></div>`).join('');
+  $('addTeam').style.opacity = teams.length >= 4 ? .4 : 1;
 }
 function addPoint(i, d){
   teams[i].pts = Math.max(0, teams[i].pts + d); saveTeams();
   const row = document.querySelector(`.team[data-i="${i}"]`), pts = row.querySelector('.pts');
   pts.textContent = teams[i].pts;
-  anim(pts, [{transform:'translateY(' + (d > 0 ? 14 : -14) + 'px) scale(.7)', opacity:0},{transform:'scale(1.25)', opacity:1, offset:.6},{transform:'none'}], {duration:420, easing:'cubic-bezier(.2,.9,.25,1)'});
-  if (d > 0 && !reduce) {
-    const f = document.createElement('span'); f.className = 'float'; f.textContent = '+1'; pts.appendChild(f);
-    f.animate([{transform:'translate(-50%,0)', opacity:1},{transform:'translate(-50%,-34px)', opacity:0}], {duration:700, easing:'ease-out'}).finished.then(() => f.remove());
-    anim(row, [{background:'#3446c9'},{background:'#2331a3'}], {duration:600});
-  }
+  anim(pts, [{transform:`translateY(${d > 0 ? 12 : -12}px) scale(.7)`, opacity:0},{transform:'scale(1.25)', opacity:1, offset:.6},{transform:'none'}], {duration:420, easing:'cubic-bezier(.2,.9,.25,1)'});
+  if (d > 0 && !reduce) { const f = document.createElement('span'); f.className = 'float'; f.textContent = '+1'; pts.appendChild(f);
+    f.animate([{transform:'translate(-50%,0)', opacity:1},{transform:'translate(-50%,-32px)', opacity:0}], {duration:700, easing:'ease-out'}).finished.then(() => f.remove()); }
   renderStrip();
 }
-$('teams').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  const i = +b.closest('.team').dataset.i; addPoint(i, b.classList.contains('plus') ? 1 : -1);
-});
-$('teams').addEventListener('input', e => {
-  const i = +e.target.closest('.team').dataset.i; teams[i].name = e.target.value || 'Lag ' + (i + 1); saveTeams(); renderStrip();
-});
-$('addTeam').onclick = () => { if (teams.length < 4) { teams.push({name:'Lag ' + (teams.length + 1), pts:0}); saveTeams(); renderTeams();
-  const row = document.querySelector('.team:last-child'); anim(row, [{opacity:0, transform:'translateY(12px)'},{opacity:1, transform:'none'}], {duration:320, easing:'ease-out'}); } };
+$('teams').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; addPoint(+b.closest('.team').dataset.i, b.classList.contains('plus') ? 1 : -1); });
+$('teams').addEventListener('input', e => { const i = +e.target.closest('.team').dataset.i; teams[i].name = e.target.value || 'Lag ' + (i + 1); saveTeams(); renderStrip(); });
+$('addTeam').onclick = () => { if (teams.length < 4) { teams.push({name:'Lag ' + (teams.length + 1), pts:0}); saveTeams(); renderTeams(); } };
 $('resetScore').onclick = () => { teams.forEach(t => t.pts = 0); saveTeams(); renderTeams(); renderStrip(); };
-$('scoreBtn').onclick = () => { renderTeams(); openSheet(true, $('scoreSheet')); };
-$('strip').onclick = e => { if (e.target.closest('.chip')) $('scoreBtn').click(); };
+$('scoreBtn').onclick = () => { renderTeams(); openSheet(true, scoreSheet); };
+$('strip').onclick = () => $('scoreBtn').click();
 renderStrip();
 
 /* ---------- modes ---------- */
 const modesEl = $('modes'), pill = $('pill');
 let mode = null;
 function placePill(){
-  const b = modesEl.querySelector(`[data-mode="${mode}"]`);
-  pill.style.width = b.offsetWidth + 'px';
-  pill.style.transform = `translateX(${b.offsetLeft}px)`;
+  const b = modesEl.querySelector(`[data-mode="${mode}"]`); if (!b) return;
+  pill.style.width = b.offsetWidth + 'px'; pill.style.transform = `translateX(${b.offsetLeft}px)`;
 }
 function setMode(m, first){
   if (m === mode) return;
   const old = mode && $('view-' + mode), nu = $('view-' + m);
-  // FLIP: let the record glide to its new size instead of jumping
-  const r0 = deck.getBoundingClientRect();
   mode = m; store.set('mode', m);
   document.body.classList.toggle('m-nummer', m === 'nummer');
   document.body.classList.toggle('m-digital', m === 'digital');
-  const r1 = deck.getBoundingClientRect();
-  if (!first && (Math.abs(r0.width - r1.width) > 2 || Math.abs(r0.top - r1.top) > 2))
-    anim(deck, [{transformOrigin:'top left', transform:`translate(${r0.left - r1.left}px,${r0.top - r1.top}px) scale(${r0.width / r1.width})`},{transformOrigin:'top left', transform:'none'}], {duration:520, easing:'cubic-bezier(.2,.9,.25,1)'});
+  $('mini').hidden = m !== 'digital';
   modesEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === m)));
   placePill();
-  if (old) {
-    const dir = m === 'nummer' ? 1 : -1;
-    const a = anim(old, [{opacity:1, transform:'none'},{opacity:0, transform:`translateX(${-24*dir}px)`}], {duration:200, easing:'ease-in'});
-    const show = () => { old.hidden = true; nu.hidden = false;
-      anim(nu, [{opacity:0, transform:`translateX(${24*dir}px)`},{opacity:1, transform:'none'}], {duration:340, easing:'cubic-bezier(.2,.9,.25,1)'});
-      if (m === 'nummer') staggerKeys();
-      if (m === 'digital') dEnter(); };
-    a ? a.finished.then(show) : show();
-  } else { nu.hidden = false; }
-  if (!current || m === 'digital') say(m === 'nummer' ? 'Skriv nummeret på kortet.' : m === 'digital' ? 'Trekk et kort, lytt og gjett tiåret.' : 'Skann et kort for å starte.');
+  const show = () => { if (old) old.hidden = true; nu.hidden = false;
+    anim(nu, [{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'none'}], {duration:340, easing:'cubic-bezier(.2,.9,.25,1)'});
+    if (m === 'nummer') staggerKeys(); if (m === 'digital') dEnter(); };
+  if (old && !first) { const a = anim(old, [{opacity:1},{opacity:0}], {duration:150}); a ? a.finished.then(show) : show(); } else show();
+  if (m === 'digital') say(dState.card ? 'Svar på spørsmålene under kortet.' : 'Trekk et kort, lytt og gjett.');
+  else if (!current) say(m === 'nummer' ? 'Skriv nummeret på kortet.' : 'Skann et kort for å starte.');
 }
 function staggerKeys(){
   document.querySelectorAll('#keys button').forEach((b, i) =>
@@ -570,52 +630,70 @@ addEventListener('resize', () => mode && placePill());
 const tag = document.createElement('script');
 tag.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(tag);
-setTimeout(() => { if (!ready) say('Får ikke kontakt med YouTube. Sjekk nettet og last siden på nytt.'); }, 12000);
-window.onYouTubeIframeAPIReady = () => {
+setTimeout(() => { if (!ready) say('Får ikke kontakt med YouTube. Sjekk nettet og last siden på nytt.'); }, 15000);
+function makePlayer(){
+  ready = false;
   player = new YT.Player('yt', {
     width: 1, height: 1,
-    playerVars: { playsinline: 1, controls: 0, disablekb: 1, rel: 0, fs: 0, iv_load_policy: 3 },
+    playerVars: { playsinline: 1, controls: 0, disablekb: 1, rel: 0, fs: 0, iv_load_policy: 3, origin: location.origin },
     events: {
-      onReady: () => { ready = true; player.unMute(); player.setVolume(100); if (pendingId) cue(pendingId, wantPlay); },
+      onReady: () => { ready = true; player.unMute(); player.setVolume(100); if (pendingId) { const id = pendingId; pendingId = null; start(id, wantPlay); } },
       onStateChange: onState,
-      onError: e => {
-        const alts = ALT[current] || [];
-        if (altIdx < alts.length) { player.loadVideoById(alts[altIdx++]); say('Prøver en annen versjon av låta …'); return; }
-        setPlaying(false); setArm(A_REST, 900); setRing(0); say('Denne låta kan ikke spilles her (feil ' + e.data + '). Prøv et annet kort.');
-      }
+      onError: onYtError
     }
   });
-};
-function cue(id, play){
+}
+window.onYouTubeIframeAPIReady = makePlayer;
+function onYtError(e){
+  const code = e.data;
+  // 2 and 5 are usually a hiccup in the player: try the same video again, then a fresh player.
+  if ((code === 2 || code === 5) && retries < 2) {
+    retries++;
+    say('Prøver igjen …');
+    if (retries === 1) setTimeout(() => { try { player.loadVideoById(curId); } catch(err) {} }, 500);
+    else { try { player.destroy(); } catch(err) {} const host = document.createElement('div'); host.id = 'yt'; $('yt-wrap').replaceChildren(host); pendingId = curId; wantPlay = true; makePlayer(); }
+    return;
+  }
+  const alts = ALT[current] || [];
+  if (altIdx < alts.length) { curId = alts[altIdx++]; retries = 0; player.loadVideoById(curId); say('Prøver en annen versjon av låta …'); return; }
+  setPlaying(false); setArm(A_REST, 900); setRing(0);
+  say('Låta kan ikke spilles akkurat nå (feil ' + code + '). Prøv igjen om litt, eller ta et annet kort.');
+}
+function start(id, play){
   if (!ready) { pendingId = id; wantPlay = play; say('Henter spilleren …'); return; }
-  pendingId = null; seeked = false; ended = false; clipStart = 0; setRing(0);
+  seeked = false; ended = false; clipStart = 0; setRing(0);
   if (play) { player.loadVideoById(id); say('Setter på platen …'); }
-  else { player.cueVideoById(id); say('Trykk på platen for å spille.'); try { player.playVideo(); } catch(e) {} }
+  else {
+    player.cueVideoById(id);
+    say(iOS ? 'Trykk på platen for å spille.' : 'Trykk på platen for å spille.');
+    if (!iOS) { try { player.playVideo(); } catch(e) {} }
+  }
 }
 function onState(e){
   const S = YT.PlayerState;
   if (e.data === S.PLAYING) {
+    retries = 0;
     let first = false;
     if (!seeked) {
       seeked = true; first = true;
       const dur = player.getDuration() || 0;
-      if ($('optRandom').checked && dur > 60) {
-        const t = Math.floor(dur * (.15 + Math.random() * .45));
-        player.seekTo(t, true); clipStart = t;
-      } else clipStart = player.getCurrentTime() || 0;
+      if ($('optRandom').checked && dur > 60) { const t = Math.floor(dur * (.15 + Math.random() * .45)); player.seekTo(t, true); clipStart = t; }
+      else clipStart = player.getCurrentTime() || 0;
     }
-    ended = false;
-    setPlaying(true);
+    ended = false; setPlaying(true);
     first ? needleDrop() : setArm(armAngle(), 700);
-    say('Hva spiller det? Gjett før du snur kortet.'); startTick();
+    if (mode !== 'digital') say('Hva spiller det? Gjett før du snur kortet.');
+    $('miniSub').textContent = 'Spiller …';
+    startTick();
   } else if (e.data === S.PAUSED || e.data === S.ENDED) {
     setPlaying(false); stopTick();
     if (e.data === S.ENDED) finish('Ferdig. Snu kortet for å sjekke svaret.');
-    else if (!ended) say('Pause. Trykk på platen for å fortsette.');
-  } else if (e.data === S.BUFFERING) say('Laster …');
+    else if (!ended) { $('miniSub').textContent = 'Pause'; if (mode !== 'digital') say('Pause. Trykk på platen for å fortsette.'); }
+  } else if (e.data === S.BUFFERING) { if (mode !== 'digital') say('Laster …'); $('miniSub').textContent = 'Laster …'; }
 }
 function finish(msg){
-  ended = true; setArm(A_REST, 1100); say(msg);
+  ended = true; setArm(A_REST, 1100); $('miniSub').textContent = 'Tiden er ute';
+  if (mode !== 'digital') say(msg);
   anim(label, [{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}], {duration:500, easing:'cubic-bezier(.3,1.6,.5,1)'});
 }
 function progress(){
@@ -628,41 +706,38 @@ function armAngle(){ return A_OUT + (A_IN - A_OUT) * progress(); }
 function startTick(){
   stopTick();
   tick = setInterval(() => {
-    const p = progress(); setRing(p);
-    if (!arm.style.transition.includes('cubic-bezier(.3,1.45')) setArm(armAngle(), 260, 'linear');
-    else setTimeout(() => arm.style.transition = '', 950);
+    setRing(progress());
+    if (!armDropping) setArm(armAngle(), 260, 'linear');
     const len = store.get('len', 30);
     if (len > 0 && (player.getCurrentTime() - clipStart) >= len) { player.pauseVideo(); finish('Tiden er ute. Snu kortet for å sjekke svaret.'); }
   }, 250);
 }
 function stopTick(){ if (tick) clearInterval(tick); tick = null; }
 function togglePlay(){
-  if (!current) { mode === 'skann' ? startScan() : bump(); return; }
+  if (!current) { if (mode === 'skann') startScan(); else if (mode === 'digital') dNext(); else bump(); return; }
   if (!player || !ready) return;
   if (player.getPlayerState() === YT.PlayerState.PLAYING) { player.pauseVideo(); return; }
   if (ended) { seeked = true; player.seekTo(clipStart, true); ended = false; setRing(0); }
   player.playVideo();
 }
-discBtn.onclick = () => {
-  anim(wobble, [{transform:'scale(1)'},{transform:'scale(.965)'},{transform:'scale(1)'}], {duration:260, easing:'ease-out'});
-  togglePlay();
-};
+discBtn.onclick = () => { anim(wobble, [{transform:'scale(1)'},{transform:'scale(.965)'},{transform:'scale(1)'}], {duration:260, easing:'ease-out'}); togglePlay(); };
+$('miniPlay').onclick = () => { anim($('miniPlay'), [{transform:'scale(.85)'},{transform:'none'}], {duration:220}); togglePlay(); };
 
-/* ---------- loading a card: old record out, new record in ---------- */
+/* ---------- loading a card ---------- */
 let swapToken = 0;
-let altIdx = 0;
 function loadCard(n, play){
-  altIdx = 0;
   const id = CARDS[n];
-  if (!id) { bump('Det finnes ikke noe kort ' + String(n).padStart(2, '0') + '. Kortene går fra 01 til 34.'); return false; }
+  if (!id) { bump('Det finnes ikke noe kort ' + pad2(n) + '. Kortene går fra 01 til 34.'); return false; }
   const token = ++swapToken;
   try { if (player && ready) player.pauseVideo(); } catch(e) {}
   setPlaying(false); setArm(A_REST, 600); setRing(0); stopTick();
-  cue(id, play);                         // straight away, while we still have the click/keypress
+  curId = id; altIdx = 0; retries = 0;
+  start(id, play);                       // straight away, while we still have the tap or key press
   const had = current; current = n;
   if (location.hash !== '#' + n) history.replaceState(null, '', '#' + n);
-  const paint = () => { if (token === swapToken) label.innerHTML = '<span class="no">' + String(n).padStart(2, '0') + '</span><span class="sm">kort</span>'; };
-  if (reduce) { paint(); return true; }
+  $('miniDisc').dataset.n = pad2(n); $('miniTitle').textContent = 'Kort ' + pad2(n); $('miniSub').textContent = play ? 'Setter på platen …' : 'Trykk play';
+  const paint = () => { if (token === swapToken) label.innerHTML = '<span class="no">' + pad2(n) + '</span><span class="sm">kort</span>'; };
+  if (reduce || getComputedStyle(deck).display === 'none') { paint(); return true; }
   const out = had ? discBtn.animate([{transform:'none',opacity:1},{transform:'translateX(-115%) rotate(-50deg)',opacity:0}], {duration:360, easing:'cubic-bezier(.5,0,.8,.4)', fill:'forwards'}) : null;
   const inn = () => { if (token !== swapToken) return; paint(); discBtn.getAnimations().forEach(a => a.cancel());
     discBtn.animate([{transform:'translateX(115%) rotate(50deg) scale(.94)',opacity:0},{transform:'none',opacity:1}], {duration:640, easing:'cubic-bezier(.2,.9,.25,1)'}); };
@@ -671,27 +746,23 @@ function loadCard(n, play){
 }
 function bump(msg){
   anim(wobble, [{transform:'rotate(0)'},{transform:'rotate(-6deg)'},{transform:'rotate(5deg)'},{transform:'rotate(-2deg)'},{transform:'rotate(0)'}], {duration:450});
-  if (msg) say(msg); else say(mode === 'nummer' ? 'Skriv nummeret på kortet først.' : 'Skann et kort først.');
+  say(msg || (mode === 'nummer' ? 'Skriv nummeret på kortet først.' : 'Skann et kort først.'));
 }
 
-/* ---------- random card, no repeats until the deck is used up ---------- */
+/* ---------- random card ---------- */
 function nextRandom(){
   const all = Object.keys(CARDS).map(Number);
-  let deck = store.get('deck', []).filter(n => all.includes(n));
-  if (!deck.length) {
-    deck = all.slice();
-    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
-    if (deck[deck.length - 1] === current && deck.length > 1) [deck[0], deck[deck.length - 1]] = [deck[deck.length - 1], deck[0]];
-  }
-  const n = deck.pop(); store.set('deck', deck);
-  return { n, left: deck.length };
+  let pile = store.get('deck', []).filter(n => all.includes(n));
+  if (!pile.length) { pile = shuffle(all.slice()); if (pile[pile.length - 1] === current && pile.length > 1) [pile[0], pile[pile.length - 1]] = [pile[pile.length - 1], pile[0]]; }
+  const n = pile.pop(); store.set('deck', pile);
+  return { n, left: pile.length };
 }
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function randomCard(btn){
   if (btn) anim(btn.querySelector('svg'), [{transform:'rotate(0) scale(1)'},{transform:'rotate(200deg) scale(1.25)'},{transform:'rotate(360deg) scale(1)'}], {duration:520, easing:'cubic-bezier(.3,1.2,.5,1)'});
   const { n, left } = nextRandom();
-  buf = ''; showNumber(n);
-  loadCard(n, true);
-  setTimeout(() => say(`Tilfeldig kort: ${String(n).padStart(2, '0')}. ${left ? left + ' kort igjen i runden.' : 'Det var siste kort i runden.'}`), 60);
+  buf = ''; showNumber(n); loadCard(n, true);
+  setTimeout(() => say(`Tilfeldig kort: ${pad2(n)}. ${left ? left + ' kort igjen i runden.' : 'Det var siste kort i runden.'}`), 60);
 }
 document.querySelectorAll('[data-random]').forEach(b => b.onclick = () => randomCard(b));
 
@@ -708,22 +779,15 @@ function setFlap(i, ch){
   old.animate([{transform:'rotateX(0)', opacity:1},{transform:'rotateX(90deg)', opacity:.2}], {duration:140, easing:'ease-in', fill:'forwards'}).finished.then(() => old.remove());
   nu.animate([{transform:'rotateX(-90deg)', opacity:.2},{transform:'rotateX(-90deg)', opacity:.2, offset:.4},{transform:'rotateX(12deg)', opacity:1, offset:.8},{transform:'rotateX(0)', opacity:1}], {duration:360, easing:'ease-out'});
 }
-function showNumber(n){
-  const s = String(n).padStart(2, '0'); setFlap(0, s[0]); setFlap(1, s[1]);
-  clearTimeout(showNumber.t); showNumber.t = setTimeout(() => { if (!buf) showBuf(); }, 1600);
-}
+function showNumber(n){ const s = pad2(n); setFlap(0, s[0]); setFlap(1, s[1]); clearTimeout(showNumber.t); showNumber.t = setTimeout(() => { if (!buf) showBuf(); }, 1600); }
 function showBuf(){
   const s = buf.padStart(2, ' ');
-  // one digit shows in the right tile, like a counter
-  setFlap(0, s[0] === ' ' ? (buf ? '0' : null) : s[0]);
-  setFlap(1, s[1] === ' ' ? null : s[1]);
-  $('goIcon').innerHTML = playing && !buf ? '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+  setFlap(0, s[0] === ' ' ? (buf ? '0' : null) : s[0]); setFlap(1, s[1] === ' ' ? null : s[1]);
+  $('goIcon').innerHTML = playing && !buf ? PAUSE : PLAY;
 }
 function submit(){
   if (!buf) { togglePlay(); return; }
-  const n = parseInt(buf, 10);
-  const ok = loadCard(n, true);
-  buf = '';
+  const n = parseInt(buf, 10); const ok = loadCard(n, true); buf = '';
   if (ok) showNumber(n);
   else { anim($('flaps'), [{transform:'translateX(0)'},{transform:'translateX(-9px)'},{transform:'translateX(9px)'},{transform:'translateX(-6px)'},{transform:'translateX(0)'}], {duration:400}); setTimeout(showBuf, 450); }
 }
@@ -737,118 +801,181 @@ function key(k){
   if (buf.length === 2) submit();
 }
 $('keys').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) key(b.dataset.k); };
-addEventListener('keydown', e => {
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (openEl) { if (e.key === 'Escape') openSheet(false); return; }
-  if ($('scan').classList.contains('on')) { if (e.key === 'Escape') stopScan(); return; }
-  if (mode === 'digital') {
-    if (/^[1-8]$/.test(e.key)) { dGuess(DECS[+e.key - 1]); e.preventDefault(); return; }
-    if (e.key === 'Enter' || e.key === 'f' || e.key === 'F') { if (document.activeElement && document.activeElement.closest('#modes,.gear,.dacts,.chips')) return; dState.card && !dFlipped ? dFlip() : dNext(true); e.preventDefault(); return; }
-    if (e.key === 'ArrowRight') { dFlipped || !dState.card ? dNext(true) : dFlip(); e.preventDefault(); return; }
-    if (e.key === 'ArrowLeft') { if (dFlipped) dNext(false); e.preventDefault(); return; }
-    if (e.key === ' ' && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) { togglePlay(); e.preventDefault(); }
-    return;
-  }
-  if (/^[0-9]$/.test(e.key)) { if (mode !== 'nummer') setMode('nummer'); key(e.key); e.preventDefault(); }
-  else if (e.key === 'Backspace') { key('back'); e.preventDefault(); }
-  else if (e.key === 't' || e.key === 'T') { randomCard(document.querySelector(`#view-${mode} [data-random]`)); e.preventDefault(); }
-  else if (e.key === 'Enter') { if (document.activeElement && document.activeElement.closest('#modes,.gear')) return; key('go'); e.preventDefault(); }
-  else if (e.key === ' ' && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) { togglePlay(); e.preventDefault(); }
-});
 
-/* ---------- Digital mode: draw, listen, guess the decade, flip ---------- */
+/* ---------- digital mode: draw, listen, answer three questions, flip ---------- */
 const DECS = ['50', '60', '70', '80', '90', '00', '10', '20'];
 const DNAME = {50:'50-tallet', 60:'60-tallet', 70:'70-tallet', 80:'80-tallet', 90:'90-tallet', '00':'2000-tallet', 10:'2010-tallet', 20:'2020-tallet'};
 const DSHORT = {50:'50', 60:'60', 70:'70', 80:'80', 90:'90', '00':'2000', 10:'2010', 20:'2020'};
 const DCOL = {50:'#d6333a', 60:'#ed7821', 70:'#edb31a', 80:'#dc3389', 90:'#8545c7', '00':'#2e6be0', 10:'#129e9e', 20:'#38a854'};
-const dcard = $('dcard'), dfront = $('dfront'), dback = $('dback'), chips = $('chips'), dacts = $('dacts');
-const pad2 = n => String(n).padStart(2, '0');
-let dState = store.get('dstate', null), dFlipped = false, dGuessed = false;
-function dFresh(){
-  const deck = Object.keys(CARDS).map(Number);
-  for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
-  return { deck, card: null, right: 0, guessed: 0, known: 0, played: 0 };
-}
+const QNAMES = ['Tiår', 'Artist', 'Låt'];
+const dcard = $('dcard'), dfront = $('dfront'), dback = $('dback'), quiz = $('quiz'), dacts = $('dacts');
+let dState = store.get('dstate2', null), dFlipped = false, dStep = 0, dRes = [], dOpts = null;
+function dFresh(){ return { deck: shuffle(Object.keys(CARDS).map(Number)), card: null, pts: 0, max: 0, played: 0 }; }
 if (!dState || !Array.isArray(dState.deck)) dState = dFresh();
 dState.card = null;
-const dSave = () => store.set('dstate', dState);
-chips.innerHTML = DECS.map((d, i) => `<button data-d="${d}" aria-label="${DNAME[d]}"><i style="background:${DCOL[d]}"></i>${DSHORT[d]}</button>`).join('');
-chips.onclick = e => { const b = e.target.closest('button'); if (b) dGuess(b.dataset.d); };
-dcard.onclick = () => { if (!dState.card) dNext(true); else if (!dFlipped) dFlip(); else { dFlipped = false; dcard.classList.remove('flipped'); } };
+const dSave = () => store.set('dstate2', dState);
+const info = n => INFO[n];
+function norm(s){
+  return String(s).toLowerCase().replace(/\s+(ft\.?|feat\.?|featuring|med)\s.*$/, '').normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/&/g, 'and').replace(/^the\s+/, '').replace(/[^a-z0-9æøå]/g, '');
+}
+function lev(a, b){
+  const m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+  let prev = Array.from({length:n + 1}, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+function close(input, target){
+  const a = norm(input), b = norm(target);
+  if (!a) return false;
+  if (a === b) return true;
+  const tol = Math.max(1, Math.floor(b.length / 6));
+  if (lev(a, b) <= tol) return true;
+  if (b.length > 14 && a.length >= Math.ceil(b.length * .55) && b.startsWith(a)) return true;   // lange titler: begynnelsen holder
+  return false;
+}
+function options(n, field){
+  const right = info(n)[field];
+  const dec = info(n)[2];
+  const seen = new Set([norm(right)]);
+  const pool = shuffle(Object.keys(INFO).map(Number).filter(k => k !== n));
+  const same = pool.filter(k => info(k)[2] === dec), other = pool.filter(k => info(k)[2] !== dec);
+  const out = [];
+  for (const k of [...same, ...other]) { const v = info(k)[field]; if (!seen.has(norm(v))) { seen.add(norm(v)); out.push(v); } if (out.length === 3) break; }
+  return shuffle([right, ...out]);
+}
+function dDots(){
+  const el = $('qdots'); el.hidden = !dState.card;
+  el.querySelectorAll('span').forEach((s, i) => { s.className = dRes[i] === true ? 'ok' : dRes[i] === false ? 'no' : i === dStep && !dFlipped ? 'now' : ''; });
+}
+function dQuestion(){
+  dDots();
+  const n = dState.card;
+  if (!n) { quiz.innerHTML = ''; return; }
+  if (dFlipped || dStep > 2) {
+    const [t, a, d] = info(n);
+    quiz.innerHTML = `<div class="answer">Det var <b>${esc(t)}</b> med <b>${esc(a)}</b>, fra ${DNAME[d]}.</div>`;
+    return;
+  }
+  const typing = store.get('answer', 'choose') === 'type';
+  if (dStep === 0) {
+    quiz.innerHTML = `<h3>Hvilket tiår er låta fra?</h3><div class="chips" id="chips">${DECS.map(d => `<button data-v="${d}" aria-label="${DNAME[d]}"><i style="background:${DCOL[d]}"></i>${DSHORT[d]}</button>`).join('')}</div>`;
+  } else {
+    const field = dStep === 1 ? 1 : 0, q = dStep === 1 ? 'Hvem er artisten?' : 'Hva heter låta?';
+    if (typing) {
+      quiz.innerHTML = `<h3>${q}</h3><form class="typer" id="typer"><input id="tin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${dStep === 1 ? 'Artist eller band' : 'Navnet på låta'}" enterkeyhint="done"><button>Svar</button></form><button class="skip" id="tskip">Vet ikke</button>`;
+      $('typer').onsubmit = e => { e.preventDefault(); const v = $('tin').value.trim(); if (v) dAnswer(close(v, info(n)[field]), $('tin')); };
+      $('tskip').onclick = () => dAnswer(false, $('tin'));
+      if (desktop()) setTimeout(() => $('tin') && $('tin').focus({preventScroll:true}), 50);
+    } else {
+      dOpts = options(n, field);
+      quiz.innerHTML = `<h3>${q}</h3><div class="opts" id="opts">${dOpts.map((o, i) => `<button data-i="${i}">${esc(o)}</button>`).join('')}</div>`;
+    }
+  }
+  quiz.querySelectorAll('button, form').forEach((b, i) => anim(b, [{opacity:0, transform:'translateY(8px)'},{opacity:1, transform:'none'}], {duration:260, delay:i*35, easing:'ease-out', fill:'backwards'}));
+}
+quiz.addEventListener('click', e => {
+  const b = e.target.closest('#chips button, #opts button'); if (!b || !dState.card || dFlipped) return;
+  if (b.parentElement.id === 'chips') dAnswer(b.dataset.v === info(dState.card)[2], b, '#chips', btn => btn.dataset.v === info(dState.card)[2]);
+  else { const field = dStep === 1 ? 1 : 0; dAnswer(dOpts[+b.dataset.i] === info(dState.card)[field], b, '#opts', btn => dOpts[+btn.dataset.i] === info(dState.card)[field]); }
+});
+function dAnswer(ok, el, groupSel, isRight){
+  if (dStep > 2 || dFlipped) return;
+  dRes[dStep] = ok;
+  if (groupSel) {
+    const g = quiz.querySelector(groupSel); g.classList.add('answered');
+    g.querySelectorAll('button').forEach(b => { if (isRight(b)) b.classList.add('right'); else if (b === el) b.classList.add('wrong'); });
+  } else if (el) {
+    el.classList.add(ok ? 'right' : 'wrong'); el.readOnly = true;
+    if (!ok) { const field = dStep === 1 ? 1 : 0; el.value = info(dState.card)[field]; }
+  }
+  anim(el, ok ? [{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}] : [{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(7px)'},{transform:'translateX(0)'}], {duration:360});
+  say(ok ? ['Riktig tiår!', 'Riktig artist!', 'Riktig låt!'][dStep] : ['Feil tiår.', 'Feil artist.', 'Feil låt.'][dStep]);
+  dDots();
+  setTimeout(() => { dStep++; if (dStep > 2) dFlip(); else dQuestion(); }, ok ? 650 : 1200);
+}
+dcard.onclick = () => { if (!dState.card) dNext(); else if (!dFlipped) dFlip(); else dcard.classList.toggle('flipped'); };
 function dButtons(){
   let html;
-  if (!dState.card) html = dState.deck.length ? `<button class="pri" data-a="draw">${dState.played ? 'Trekk neste kort' : 'Trekk første kort'}</button>`
-                                              : `<button class="pri" data-a="reset">Ny runde</button>`;
-  else if (!dFlipped) html = `<button data-a="flip">Snu kortet</button>`;
-  else html = `<button data-a="again">Øv mer</button><button class="pri" data-a="known">Kunne den</button>`;
+  if (!dState.card) html = dState.deck.length ? `<button class="pri" data-a="draw">${dState.played ? 'Trekk neste kort' : 'Trekk første kort'}</button>` : `<button class="pri" data-a="reset">Ny runde</button>`;
+  else if (!dFlipped) html = `<button data-a="flip">Vet ikke, snu kortet</button>`;
+  else html = `<button class="pri" data-a="next">Neste kort</button>`;
   dacts.innerHTML = html;
   dacts.querySelectorAll('button').forEach((b, i) => anim(b, [{opacity:0, transform:'translateY(8px)'},{opacity:1, transform:'none'}], {duration:280, delay:i*60, easing:'ease-out', fill:'backwards'}));
   const left = dState.deck.length;
-  $('dscore').textContent = dState.guessed ? `Riktig tiår på ${dState.right} av ${dState.guessed}. ${left} kort igjen i bunken.` : `${left} kort i bunken.`;
+  $('dscore').textContent = dState.max ? `${dState.pts} av ${dState.max} poeng. ${left} kort igjen i bunken.` : `${left} kort i bunken. Hvert kort gir opptil 3 poeng.`;
 }
 dacts.onclick = e => { const b = e.target.closest('button'); if (!b) return;
-  ({draw: () => dNext(true), flip: dFlip, again: () => dNext(false), known: () => dNext(true),
-    reset: () => { dState = dFresh(); dSave(); dShowDeck(); dButtons(); say('Ny runde. Trekk et kort.'); }})[b.dataset.a](); };
-function dChipsReset(){ chips.classList.remove('answered'); chips.querySelectorAll('button').forEach(b => { b.className = ''; b.removeAttribute('aria-disabled'); }); }
-function dShowDeck(){
-  dfront.src = 'c/decka.webp'; dback.src = 'c/deckb.webp';
-  dcard.classList.add('empty'); dcard.classList.remove('flipped'); dFlipped = false; dChipsReset();
-}
-function preload(n){ if (!n) return; [new Image(), new Image()].forEach((im, i) => im.src = `c/${pad2(n)}${i ? 'b' : 'a'}.webp`); }
-async function dNext(known){
-  // finish the card on the table
+  ({draw: dNext, next: dNext, flip: dGiveUp, reset: () => { dState = dFresh(); dSave(); dShowDeck(); dButtons(); say('Ny runde. Trekk et kort.'); }})[b.dataset.a](); };
+function dShowDeck(){ dfront.src = 'c/decka.webp'; dback.src = 'c/deckb.webp'; dcard.classList.add('empty'); dcard.classList.remove('flipped'); dFlipped = false; quiz.innerHTML = ''; $('qdots').hidden = true; }
+function preload(n){ if (n) ['a', 'b'].forEach(s => { const im = new Image(); im.src = `c/${pad2(n)}${s}.webp`; }); }
+function dGiveUp(){ for (let i = dStep; i < 3; i++) dRes[i] = false; dStep = 3; dFlip(); }
+async function dNext(){
+  const inner = dcard.querySelector('.inner');
   if (dState.card) {
-    if (!known) { const back = Math.max(0, dState.deck.length - 4); dState.deck.splice(back, 0, dState.card); }
-    else dState.known++;
-    const out = anim(dcard.querySelector('.inner'), [{transform: dFlipped ? 'rotateY(180deg)' : 'none', opacity:1},
-      {transform:`translateX(${known ? 120 : -120}px) translateY(-30px) rotate(${known ? 14 : -14}deg) ${dFlipped ? 'rotateY(180deg)' : ''}`, opacity:0}], {duration:340, easing:'cubic-bezier(.5,0,.8,.4)', fill:'forwards'});
+    const okAll = dRes.filter(Boolean).length === 3;
+    if (!okAll) { const back = Math.max(0, dState.deck.length - 4); dState.deck.splice(back, 0, dState.card); }
+    const out = anim(inner, [{transform: dFlipped ? 'rotateY(180deg)' : 'none', opacity:1},
+      {transform:`translateX(${okAll ? 110 : -110}px) translateY(-24px) rotate(${okAll ? 14 : -14}deg) ${dFlipped ? 'rotateY(180deg)' : ''}`, opacity:0}], {duration:320, easing:'cubic-bezier(.5,0,.8,.4)', fill:'forwards'});
     if (out) await out.finished;
     dState.card = null;
   }
   if (!dState.deck.length) {
-    dSave(); dShowDeck(); dcard.querySelector('.inner').getAnimations().forEach(a => a.cancel()); dButtons();
-    say(`Runden er ferdig! Riktig tiår på ${dState.right} av ${dState.guessed} låter.`);
-    if (!reduce) for (let i = 0; i < 3; i++) setTimeout(() => anim(dcard, [{transform:'none'},{transform:'translateY(-14px) rotate(-3deg)'},{transform:'none'}], {duration:420, easing:'cubic-bezier(.3,1.5,.5,1)'}), i * 450);
+    dSave(); dShowDeck(); inner.getAnimations().forEach(a => a.cancel()); dButtons();
+    say(`Runden er ferdig! Du fikk ${dState.pts} av ${dState.max} poeng.`);
     return;
   }
   const n = dState.deck.pop(); dState.card = n; dState.played++; dSave();
-  dGuessed = false; dFlipped = false;
-  const inner = dcard.querySelector('.inner');
+  dFlipped = false; dStep = 0; dRes = [];
   inner.style.transition = 'none'; dcard.classList.remove('flipped', 'empty'); inner.getBoundingClientRect(); inner.style.transition = '';
   inner.getAnimations().forEach(a => a.cancel());
   dfront.src = `c/${pad2(n)}a.webp`; dback.src = `c/${pad2(n)}b.webp`;
-  anim(inner, [{transform:'translate(14px,12px) rotate(6deg) scale(.96)', opacity:.2},{transform:'translate(-8px,-16px) rotate(-3deg)', opacity:1, offset:.55},{transform:'none', opacity:1}], {duration:620, easing:'cubic-bezier(.2,.9,.25,1)'});
-  dChipsReset(); dButtons(); preload(dState.deck[dState.deck.length - 1]);
+  anim(inner, [{transform:'translate(12px,10px) rotate(6deg) scale(.96)', opacity:.2},{transform:'translate(-6px,-14px) rotate(-3deg)', opacity:1, offset:.55},{transform:'none', opacity:1}], {duration:600, easing:'cubic-bezier(.2,.9,.25,1)'});
+  dQuestion(); dButtons(); preload(dState.deck[dState.deck.length - 1]);
+  say('Lytt, og svar på spørsmålene.');
   loadCard(n, true);
 }
 function dFlip(){
   if (!dState.card || dFlipped) return;
   dFlipped = true; dcard.classList.add('flipped');
   anim($('dshine'), [{opacity:0, transform:'translateX(-60%)'},{opacity:1, offset:.5},{opacity:0, transform:'translateX(60%)'}], {duration:800, delay:150, easing:'ease-in-out'});
-  if (!dGuessed) { chips.classList.add('answered'); chips.querySelectorAll('button').forEach(b => { b.setAttribute('aria-disabled', 'true'); if (b.dataset.d === DEC[dState.card]) b.classList.add('right'); }); }
-  dButtons();
-}
-function dGuess(d){
-  if (!dState.card || dFlipped || dGuessed) return;
-  dGuessed = true; dState.guessed++;
-  const ok = DEC[dState.card] === d; if (ok) dState.right++;
-  dSave(); chips.classList.add('answered');
-  chips.querySelectorAll('button').forEach(b => {
-    b.setAttribute('aria-disabled', 'true');
-    if (b.dataset.d === DEC[dState.card]) b.classList.add('right');
-    else if (b.dataset.d === d) b.classList.add('wrong');
-  });
-  const picked = chips.querySelector(`[data-d="${d}"]`);
-  anim(picked, ok ? [{transform:'scale(1)'},{transform:'scale(1.18)'},{transform:'scale(1)'}] : [{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}], {duration:380});
-  say(ok ? 'Riktig tiår! Kunne du tittel og artist også?' : `Nei, den er fra ${DNAME[DEC[dState.card]]}. Kunne du tittel og artist?`);
-  setTimeout(dFlip, ok ? 350 : 650);
+  for (let i = 0; i < 3; i++) if (dRes[i] === undefined) dRes[i] = false;
+  const got = dRes.filter(Boolean).length;
+  dState.pts += got; dState.max += 3; dSave();
+  dQuestion(); dButtons();
+  say(got === 3 ? 'Alle tre riktige! Kortet er ferdig.' : `${got} av 3 riktige. Kortet kommer tilbake senere i bunken.`);
+  if (got === 3) anim(dcard, [{transform:'none'},{transform:'translateY(-12px) rotate(-2deg)'},{transform:'none'}], {duration:500, delay:500, easing:'cubic-bezier(.3,1.6,.5,1)'});
 }
 function dEnter(){
-  const cards = [...dcard.querySelectorAll('.stack'), dcard.querySelector('.inner')];
-  cards.forEach((el, i) => anim(el, [{opacity:0, transform:'translateY(30px) rotate(-6deg)'},{opacity:1}], {duration:420, delay:i*70, easing:'cubic-bezier(.2,.9,.25,1)', fill:'backwards'}));
-  dButtons();
+  [...dcard.querySelectorAll('.stack'), dcard.querySelector('.inner')].forEach((el, i) => anim(el, [{opacity:0, transform:'translateY(26px) rotate(-6deg)'},{opacity:1}], {duration:420, delay:i*70, easing:'cubic-bezier(.2,.9,.25,1)', fill:'backwards'}));
+  dQuestion(); dButtons();
 }
 dButtons();
+
+/* ---------- keyboard ---------- */
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (!$('guide').hidden) { if (e.key === 'ArrowRight') gGo(1); else if (e.key === 'ArrowLeft') gGo(-1); else if (e.key === 'Escape') gClose(); return; }
+  if (openEl) { if (e.key === 'Escape') openSheet(false); return; }
+  if ($('scan').classList.contains('on')) { if (e.key === 'Escape') stopScan(); return; }
+  const inField = document.activeElement && document.activeElement.tagName === 'INPUT';
+  if (mode === 'digital') {
+    if (inField) return;
+    if (dState.card && !dFlipped) {
+      if (dStep === 0 && /^[1-8]$/.test(e.key)) { const b = quiz.querySelectorAll('#chips button')[+e.key - 1]; if (b) b.click(); e.preventDefault(); return; }
+      if (dStep > 0 && /^[1-4]$/.test(e.key)) { const b = quiz.querySelectorAll('#opts button')[+e.key - 1]; if (b) b.click(); e.preventDefault(); return; }
+    }
+    if (e.key === 'Enter' || e.key === 'ArrowRight') { if (document.activeElement && document.activeElement.closest('button')) return; if (!dState.card || dFlipped) dNext(); e.preventDefault(); return; }
+    if (e.key === ' ') { togglePlay(); e.preventDefault(); }
+    return;
+  }
+  if (inField) return;
+  if (/^[0-9]$/.test(e.key)) { if (mode !== 'nummer') setMode('nummer'); key(e.key); e.preventDefault(); }
+  else if (e.key === 'Backspace') { key('back'); e.preventDefault(); }
+  else if (e.key === 't' || e.key === 'T') { randomCard(document.querySelector(`#view-${mode} [data-random]`)); e.preventDefault(); }
+  else if (e.key === 'Enter') { if (document.activeElement && document.activeElement.closest('button')) return; key('go'); e.preventDefault(); }
+  else if (e.key === ' ' && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) { togglePlay(); e.preventDefault(); }
+});
 
 /* ---------- QR scanning ---------- */
 function parseCode(text){
@@ -866,16 +993,11 @@ async function startScan(){
   try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
   catch (e) { say('Siden får ikke bruke kameraet. Tillat kamera for siden i nettleseren, eller bytt til Nummer.'); return; }
   video.srcObject = stream; await video.play();
-  $('scan').classList.add('on');
-  scanLoop();
+  $('scan').classList.add('on'); scanLoop();
 }
 $('scanBtn').onclick = startScan;
 $('closeScan').onclick = stopScan;
-function stopScan(){
-  $('scan').classList.remove('on');
-  if (raf) cancelAnimationFrame(raf); raf = null;
-  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
-}
+function stopScan(){ $('scan').classList.remove('on'); if (raf) cancelAnimationFrame(raf); raf = null; if (stream) stream.getTracks().forEach(t => t.stop()); stream = null; }
 function scanLoop(){
   if (video.readyState === video.HAVE_ENOUGH_DATA) {
     const w = video.videoWidth, h = video.videoHeight, s = Math.min(1, 640 / Math.max(w, h));
@@ -889,17 +1011,58 @@ function scanLoop(){
   raf = requestAnimationFrame(scanLoop);
 }
 
+/* ---------- guide ---------- */
+const ICON = {
+  skann: '<svg viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M7 12h10"/></svg>',
+  nummer: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg>',
+  digital: '<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M10 8h4M9 16h6"/></svg>',
+  score: '<svg viewBox="0 0 24 24"><path d="M4 20V13h5v7M9 20V8h6v12M15 20v-5h5v5"/><path d="M3 20h18"/></svg>',
+  gear: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>'
+};
+const SLIDES = [
+  { art: '<div class="art-disc"></div>', h: 'Velkommen til Tidslåt',
+    p: 'Et musikkspill for å øve til lytteprøven: 34 låter fra 1954 til 2025. Du hører en låt og gjetter tiåret, artisten og navnet på låta.' },
+  { art: `<div class="art-icons"><span>${ICON.skann}</span><span>${ICON.nummer}</span><span>${ICON.digital}</span></div>`, h: 'Tre måter å spille på',
+    body: `<div class="gmodes">
+      <div class="gmode"><span class="gi">${ICON.skann}</span><span><b>Skann</b>Har du de trykte kortene? Skann QR-koden med kameraet.</span></div>
+      <div class="gmode"><span class="gi">${ICON.nummer}</span><span><b>Nummer</b>Skriv nummeret på kortet, for eksempel 07. Best på PC.</span></div>
+      <div class="gmode"><span class="gi">${ICON.digital}</span><span><b>Digital</b>Uten kort: trekk et kort på skjermen, svar og snu det.</span></div></div>` },
+  { art: '<div class="art-flip"><div>?</div></div>', h: 'Titlene er hemmelige',
+    p: 'Siden viser aldri hva som spiller. Trykk på platen for å spille eller pause. Ringen rundt platen viser hvor langt låta har kommet. Fasiten står på baksiden av kortet.' },
+  { art: `<div class="art-icons"><span>${ICON.score}</span><span>${ICON.gear}</span></div>`, h: 'Spill med andre',
+    p: 'Poengtavla holder styr på lagene. I innstillingene velger du hvor lenge låta spilles, om den starter et tilfeldig sted, og om du vil velge eller skrive svarene.' },
+  { pick: true, h: 'Hvordan vil du starte?', p: 'Du kan bytte når som helst øverst på siden. Spørsmålstegnet viser denne guiden igjen.' }
+];
+let gi = 0;
+function gRender(dir){
+  const s = SLIDES[gi], wrap = $('gslides');
+  wrap.innerHTML = `<div class="gslide">${s.art ? `<div class="gart">${s.art}</div>` : ''}<h2>${s.h}</h2>${s.p ? `<p>${s.p}</p>` : ''}${s.body || ''}
+    ${s.pick ? `<div class="gpick">${['skann', 'nummer', 'digital'].map(m => `<button data-pick="${m}">${ICON[m]}${m[0].toUpperCase() + m.slice(1)}</button>`).join('')}</div>` : ''}</div>`;
+  $('gdots').innerHTML = SLIDES.map((_, i) => `<i class="${i === gi ? 'on' : ''}"></i>`).join('');
+  $('gback').style.visibility = gi ? 'visible' : 'hidden';
+  $('gnext').textContent = gi === SLIDES.length - 1 ? 'Start' : 'Neste';
+  anim(wrap.firstChild, [{opacity:0, transform:`translateX(${dir >= 0 ? 30 : -30}px)`},{opacity:1, transform:'none'}], {duration:360, easing:'cubic-bezier(.2,.9,.25,1)'});
+  wrap.querySelectorAll('.gmode, .gpick button, .art-icons span').forEach((el, i) => anim(el, [{opacity:0, transform:'translateY(10px) scale(.96)'},{opacity:1, transform:'none'}], {duration:320, delay:120 + i*70, easing:'ease-out', fill:'backwards'}));
+  wrap.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { setMode(b.dataset.pick); gClose(); });
+}
+function gGo(d){ const n = gi + d; if (n < 0) return; if (n >= SLIDES.length) { gClose(); return; } gi = n; gRender(d); }
+function gOpen(){ gi = 0; $('guide').hidden = false; anim($('gbox'), [{opacity:0, transform:'translateY(30px) scale(.96)'},{opacity:1, transform:'none'}], {duration:420, easing:'cubic-bezier(.2,.9,.25,1)'}); gRender(1); }
+function gClose(){ store.set('seenGuide', true); const a = anim($('guide'), [{opacity:1},{opacity:0}], {duration:220}); const hide = () => { $('guide').hidden = true; }; a ? a.finished.then(hide) : hide(); }
+$('gnext').onclick = () => gGo(1); $('gback').onclick = () => gGo(-1); $('gskip').onclick = gClose;
+$('helpBtn').onclick = gOpen;
+$('guide').addEventListener('click', e => { if (e.target.id === 'guide') gClose(); });
+
 /* ---------- intro: the record slides out of its sleeve ---------- */
 const reveal = () => {
-  [$('head'), $('panel'), $('eq')].forEach((el, i) => { el.classList.remove('pre');
+  [$('head'), $('panel')].forEach((el, i) => { el.classList.remove('pre');
     anim(el, [{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'none'}], {duration:520, delay:i*90, easing:'ease-out', fill:'backwards'}); });
   requestAnimationFrame(placePill);
   if (mode === 'nummer') staggerKeys();
-  if (mode === 'digital') dEnter();
 };
 const startHash = (location.hash.match(/^#(\d{1,3})$/) || [])[1];
 async function intro(){
   const sleeve = $('sleeve'), D = stage.offsetWidth;
+  if (!D) return;
   sleeve.hidden = false; arm.style.opacity = 0;
   let skipped = false, skip = null;
   const wait = ms => new Promise(r => { const t = setTimeout(r, ms); skip = () => { skipped = true; clearTimeout(t); r(); }; });
@@ -907,36 +1070,28 @@ async function intro(){
   addEventListener('pointerdown', onSkip, { once: true }); addEventListener('keydown', onSkip, { once: true });
   sleeve.animate([{transform:'translateY(46px) scale(.93)',opacity:0},{transform:'none',opacity:1}], {duration:600, easing:'cubic-bezier(.2,.8,.2,1)', fill:'both'});
   await wait(700);
-  if (!skipped) {
-    discBtn.animate([{transform:'none'},{transform:`translateY(${-D * .46}px)`}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)', fill:'forwards'});
-    disc.animate([{rotate:'0deg'},{rotate:'200deg'}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)'});
-    await wait(1050);
-  }
-  if (!skipped) {
-    sleeve.animate([{transform:'none',opacity:1},{transform:'translateY(115%) rotate(7deg)',opacity:0}], {duration:720, easing:'cubic-bezier(.6,0,.9,.4)', fill:'forwards'});
+  if (!skipped) { discBtn.animate([{transform:'none'},{transform:`translateY(${-D * .46}px)`}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)', fill:'forwards'});
+    disc.animate([{rotate:'0deg'},{rotate:'200deg'}], {duration:900, easing:'cubic-bezier(.5,0,.2,1)'}); await wait(1050); }
+  if (!skipped) { sleeve.animate([{transform:'none',opacity:1},{transform:'translateY(115%) rotate(7deg)',opacity:0}], {duration:720, easing:'cubic-bezier(.6,0,.9,.4)', fill:'forwards'});
     discBtn.getAnimations().forEach(a => a.cancel());
-    discBtn.animate([{transform:`translateY(${-D * .46}px)`},{transform:'none'}], {duration:760, easing:'cubic-bezier(.2,.9,.25,1)'});
-    await wait(780);
-  }
+    discBtn.animate([{transform:`translateY(${-D * .46}px)`},{transform:'none'}], {duration:760, easing:'cubic-bezier(.2,.9,.25,1)'}); await wait(780); }
   discBtn.getAnimations().forEach(a => a.cancel()); sleeve.getAnimations().forEach(a => a.cancel());
   sleeve.hidden = true; arm.style.opacity = 1;
   setArm(A_REST + 16, 0); arm.getBoundingClientRect(); setArm(A_REST, 800, 'cubic-bezier(.3,1.4,.5,1)');
   removeEventListener('pointerdown', onSkip); removeEventListener('keydown', onSkip);
-  reveal();
 }
 async function boot(){
   const touch = matchMedia('(pointer:coarse)').matches;
   setMode(store.get('mode', touch ? 'skann' : 'nummer'), true);
-  if (reduce || startHash) {
-    reveal();
-    anim(discBtn, [{transform:'scale(.9)',opacity:0},{transform:'none',opacity:1}], {duration:500, easing:'cubic-bezier(.2,.9,.25,1)'});
-  } else {
+  if (!reduce && !startHash && getComputedStyle(deck).display !== 'none') {
     await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 900))]);
     await intro();
   }
-  if (startHash) loadCard(+startHash, false);
+  reveal();
+  if (startHash) { if (mode === 'digital') setMode('skann'); loadCard(+startHash, false); }
+  if (!store.get('seenGuide', false)) setTimeout(gOpen, startHash ? 300 : 500);
 }
-addEventListener('hashchange', () => { const m = location.hash.match(/^#(\d{1,3})$/); if (m && +m[1] !== current) loadCard(+m[1], false); });
+addEventListener('hashchange', () => { const m = location.hash.match(/^#(\d{1,3})$/); if (m && +m[1] !== current && mode !== 'digital') loadCard(+m[1], false); });
 boot();
 </script>
 </body>
