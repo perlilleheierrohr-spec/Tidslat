@@ -176,10 +176,31 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 .sw input:checked+span{background:var(--mustard)}
 .sw input:checked+span::before{transform:translateX(24px);background:var(--deep)}
 .sw input:focus-visible+span{outline:3px solid #fff;outline-offset:3px}
-.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 26px}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0 26px}
 .seg button{height:50px;border-radius:14px;background:#2331a3;font-weight:700;font-size:16px;transition:background .15s,color .15s,transform .12s}
 .seg button:active{transform:scale(.96)}
 .seg button[aria-pressed=true]{background:var(--mustard);color:var(--ink)}
+.random{display:flex;align-items:center;gap:9px;height:46px;padding:0 18px 0 14px;border-radius:99px;background:var(--deep);font-weight:700;font-size:16px;transition:transform .12s}
+.random:active{transform:scale(.95)}
+.random svg{width:24px;height:24px}
+.hdr-r{justify-self:end;display:flex;gap:8px}
+.gear.score-btn svg{stroke-width:2.2}
+.strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:0}
+@media (min-width:900px){.strip{justify-content:flex-start}}
+.chip{display:flex;align-items:center;gap:7px;height:32px;padding:0 12px 0 8px;border-radius:99px;background:var(--deep);font-weight:700;font-size:14px}
+.chip i{width:14px;height:14px;border-radius:50%}
+.chip b{font-stretch:80%;font-size:17px;font-weight:800}
+.teams{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.team{display:grid;grid-template-columns:14px 1fr 46px 64px 46px;align-items:center;gap:10px;background:#2331a3;border-radius:16px;padding:8px 10px 8px 14px;position:relative}
+.team .dot{width:14px;height:14px;border-radius:50%}
+.team input{min-width:0;background:none;border:0;color:#fff;font:inherit;font-size:17px;font-weight:700;padding:6px 0;border-bottom:2px solid transparent}
+.team input:focus{outline:none;border-bottom-color:var(--mustard)}
+.team .pts{position:relative;text-align:center;font-weight:800;font-stretch:75%;font-size:38px;line-height:1;overflow:visible}
+.team button{width:46px;height:46px;border-radius:14px;background:var(--deep);font-size:26px;font-weight:800;line-height:1}
+.team button.plus{background:var(--mustard);color:var(--ink)}
+.float{position:absolute;left:50%;top:-6px;transform:translateX(-50%);font-weight:800;font-size:18px;color:var(--mustard);pointer-events:none}
+.sheet-row{display:flex;gap:10px;margin-bottom:14px}
+.sheet-row button{flex:1;height:50px;border-radius:14px;background:#2331a3;font-weight:700;font-size:16px}
 .done{width:100%;height:56px;border-radius:99px;background:#fff;color:var(--deep);font-weight:800;font-size:18px}
 
 #yt-wrap{position:fixed;left:0;bottom:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
@@ -204,9 +225,14 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
     <button data-mode="skann" aria-pressed="false">Skann</button>
     <button data-mode="nummer" aria-pressed="false">Nummer</button>
   </div>
-  <button class="gear" id="gear" aria-label="Innstillinger">
-    <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>
-  </button>
+  <div class="hdr-r">
+    <button class="gear score-btn" id="scoreBtn" aria-label="Poengtavle">
+      <svg viewBox="0 0 24 24"><path d="M4 20V13h5v7M9 20V8h6v12M15 20v-5h5v5"/><path d="M3 20h18"/></svg>
+    </button>
+    <button class="gear" id="gear" aria-label="Innstillinger">
+      <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/></svg>
+    </button>
+  </div>
 </header>
 
 <main>
@@ -238,6 +264,7 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
 
   <div class="panel pre" id="panel">
     <p class="status" id="status" aria-live="polite">Velg et kort for å starte.</p>
+    <div class="strip" id="strip"></div>
     <div class="views">
       <div class="view" id="view-skann" hidden>
         <button class="scan" id="scanBtn">
@@ -245,6 +272,7 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
           Skann kort
         </button>
         <p class="small">Hold QR-koden på kortet foran kameraet.</p>
+        <button class="random" data-random><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Tilfeldig kort</button>
       </div>
       <div class="view" id="view-nummer" hidden>
         <div class="flaps" id="flaps" aria-live="polite" aria-label="Kortnummer">
@@ -259,7 +287,8 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
           <button data-k="0">0</button>
           <button data-k="go" class="go" aria-label="Spill"><svg class="fill" viewBox="0 0 24 24" id="goIcon"><path d="M8 5v14l11-7z"/></svg></button>
         </div>
-        <p class="kbd">Skriv nummeret på tastaturet. <b>Enter</b> spiller, <b>mellomrom</b> pauser.</p>
+        <button class="random" data-random><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.3" fill="currentColor" stroke="none"/><circle cx="9" cy="15" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Tilfeldig kort</button>
+        <p class="kbd">Skriv nummeret på tastaturet. <b>Enter</b> spiller, <b>mellomrom</b> pauser, <b>T</b> gir et tilfeldig kort.</p>
       </div>
     </div>
   </div>
@@ -281,9 +310,16 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;justify-conten
   </div>
   <b style="font-size:18px">Spilletid</b>
   <div class="seg" id="seg">
-    <button data-len="20">20 sek</button><button data-len="30">30 sek</button><button data-len="60">60 sek</button><button data-len="0">Hele låta</button>
+    <button data-len="10">10 sek</button><button data-len="20">20 sek</button><button data-len="30">30 sek</button><button data-len="60">60 sek</button><button data-len="0">Hele</button>
   </div>
   <button class="done" id="done">Ferdig</button>
+</div>
+
+<div class="sheet" id="scoreSheet" role="dialog" aria-label="Poengtavle" aria-hidden="true">
+  <h2>Poengtavle</h2>
+  <div class="teams" id="teams"></div>
+  <div class="sheet-row"><button id="addTeam">Legg til lag</button><button id="resetScore">Nullstill poeng</button></div>
+  <button class="done" id="scoreDone">Ferdig</button>
 </div>
 
 <div id="yt-wrap"><div id="yt"></div></div>
@@ -368,9 +404,61 @@ function markLen(){ const v = store.get('len', 30); document.querySelectorAll('#
 markLen();
 $('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; store.set('len', +b.dataset.len); markLen();
   anim(b, [{transform:'scale(.9)'},{transform:'scale(1.06)'},{transform:'none'}], {duration:320}); };
-const openSheet = on => { sheet.classList.toggle('on', on); scrim.classList.toggle('on', on); sheet.setAttribute('aria-hidden', String(!on)); (on ? $('done') : $('gear')).focus({preventScroll:true}); };
-$('gear').onclick = () => openSheet(true);
-$('done').onclick = scrim.onclick = () => openSheet(false);
+let openEl = null;
+function openSheet(on, el){
+  el = el || sheet;
+  if (on) { openEl = el; } else { el = openEl || sheet; openEl = null; }
+  el.classList.toggle('on', on); scrim.classList.toggle('on', on); el.setAttribute('aria-hidden', String(!on));
+  if (!on) (el === sheet ? $('gear') : $('scoreBtn')).focus({preventScroll:true});
+}
+$('gear').onclick = () => openSheet(true, sheet);
+$('done').onclick = $('scoreDone').onclick = scrim.onclick = () => openSheet(false);
+
+/* ---------- scoreboard ---------- */
+const TEAM_COLS = ['#f4b400', '#dc3389', '#129e9e', '#ed7821'];
+let teams = store.get('teams', [{name:'Lag 1', pts:0}, {name:'Lag 2', pts:0}]);
+const saveTeams = () => store.set('teams', teams);
+function renderStrip(){
+  const st = $('strip');
+  const used = teams.some(t => t.pts !== 0);
+  st.innerHTML = used ? teams.map((t, i) => `<button class="chip" data-i="${i}"><i style="background:${TEAM_COLS[i]}"></i>${t.name.replace(/[<&]/g, '')}<b>${t.pts}</b></button>`).join('') : '';
+}
+function renderTeams(){
+  $('teams').innerHTML = teams.map((t, i) => `
+    <div class="team" data-i="${i}">
+      <span class="dot" style="background:${TEAM_COLS[i]}"></span>
+      <input value="${t.name.replace(/"/g, '&quot;')}" aria-label="Navn på lag ${i + 1}" maxlength="14">
+      <button class="minus" aria-label="Ett poeng mindre">−</button>
+      <span class="pts">${t.pts}</span>
+      <button class="plus" aria-label="Ett poeng mer">+</button>
+    </div>`).join('');
+  $('addTeam').disabled = teams.length >= 4; $('addTeam').style.opacity = teams.length >= 4 ? .4 : 1;
+}
+function addPoint(i, d){
+  teams[i].pts = Math.max(0, teams[i].pts + d); saveTeams();
+  const row = document.querySelector(`.team[data-i="${i}"]`), pts = row.querySelector('.pts');
+  pts.textContent = teams[i].pts;
+  anim(pts, [{transform:'translateY(' + (d > 0 ? 14 : -14) + 'px) scale(.7)', opacity:0},{transform:'scale(1.25)', opacity:1, offset:.6},{transform:'none'}], {duration:420, easing:'cubic-bezier(.2,.9,.25,1)'});
+  if (d > 0 && !reduce) {
+    const f = document.createElement('span'); f.className = 'float'; f.textContent = '+1'; pts.appendChild(f);
+    f.animate([{transform:'translate(-50%,0)', opacity:1},{transform:'translate(-50%,-34px)', opacity:0}], {duration:700, easing:'ease-out'}).finished.then(() => f.remove());
+    anim(row, [{background:'#3446c9'},{background:'#2331a3'}], {duration:600});
+  }
+  renderStrip();
+}
+$('teams').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const i = +b.closest('.team').dataset.i; addPoint(i, b.classList.contains('plus') ? 1 : -1);
+});
+$('teams').addEventListener('input', e => {
+  const i = +e.target.closest('.team').dataset.i; teams[i].name = e.target.value || 'Lag ' + (i + 1); saveTeams(); renderStrip();
+});
+$('addTeam').onclick = () => { if (teams.length < 4) { teams.push({name:'Lag ' + (teams.length + 1), pts:0}); saveTeams(); renderTeams();
+  const row = document.querySelector('.team:last-child'); anim(row, [{opacity:0, transform:'translateY(12px)'},{opacity:1, transform:'none'}], {duration:320, easing:'ease-out'}); } };
+$('resetScore').onclick = () => { teams.forEach(t => t.pts = 0); saveTeams(); renderTeams(); renderStrip(); };
+$('scoreBtn').onclick = () => { renderTeams(); openSheet(true, $('scoreSheet')); };
+$('strip').onclick = e => { if (e.target.closest('.chip')) $('scoreBtn').click(); };
+renderStrip();
 
 /* ---------- modes ---------- */
 const modesEl = $('modes'), pill = $('pill');
@@ -511,6 +599,27 @@ function bump(msg){
   if (msg) say(msg); else say(mode === 'nummer' ? 'Skriv nummeret på kortet først.' : 'Skann et kort først.');
 }
 
+/* ---------- random card, no repeats until the deck is used up ---------- */
+function nextRandom(){
+  const all = Object.keys(CARDS).map(Number);
+  let deck = store.get('deck', []).filter(n => all.includes(n));
+  if (!deck.length) {
+    deck = all.slice();
+    for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+    if (deck[deck.length - 1] === current && deck.length > 1) [deck[0], deck[deck.length - 1]] = [deck[deck.length - 1], deck[0]];
+  }
+  const n = deck.pop(); store.set('deck', deck);
+  return { n, left: deck.length };
+}
+function randomCard(btn){
+  if (btn) anim(btn.querySelector('svg'), [{transform:'rotate(0) scale(1)'},{transform:'rotate(200deg) scale(1.25)'},{transform:'rotate(360deg) scale(1)'}], {duration:520, easing:'cubic-bezier(.3,1.2,.5,1)'});
+  const { n, left } = nextRandom();
+  buf = ''; showNumber(n);
+  loadCard(n, true);
+  setTimeout(() => say(`Tilfeldig kort: ${String(n).padStart(2, '0')}. ${left ? left + ' kort igjen i runden.' : 'Det var siste kort i runden.'}`), 60);
+}
+document.querySelectorAll('[data-random]').forEach(b => b.onclick = () => randomCard(b));
+
 /* ---------- number mode ---------- */
 const flaps = [...document.querySelectorAll('.flap')];
 let buf = '';
@@ -524,6 +633,10 @@ function setFlap(i, ch){
   old.animate([{transform:'rotateX(0)', opacity:1},{transform:'rotateX(90deg)', opacity:.2}], {duration:140, easing:'ease-in', fill:'forwards'}).finished.then(() => old.remove());
   nu.animate([{transform:'rotateX(-90deg)', opacity:.2},{transform:'rotateX(-90deg)', opacity:.2, offset:.4},{transform:'rotateX(12deg)', opacity:1, offset:.8},{transform:'rotateX(0)', opacity:1}], {duration:360, easing:'ease-out'});
 }
+function showNumber(n){
+  const s = String(n).padStart(2, '0'); setFlap(0, s[0]); setFlap(1, s[1]);
+  clearTimeout(showNumber.t); showNumber.t = setTimeout(() => { if (!buf) showBuf(); }, 1600);
+}
 function showBuf(){
   const s = buf.padStart(2, ' ');
   // one digit shows in the right tile, like a counter
@@ -534,8 +647,10 @@ function showBuf(){
 function submit(){
   if (!buf) { togglePlay(); return; }
   const n = parseInt(buf, 10);
-  if (!loadCard(n, true)) { anim($('flaps'), [{transform:'translateX(0)'},{transform:'translateX(-9px)'},{transform:'translateX(9px)'},{transform:'translateX(-6px)'},{transform:'translateX(0)'}], {duration:400}); }
-  buf = ''; setTimeout(showBuf, 450);
+  const ok = loadCard(n, true);
+  buf = '';
+  if (ok) showNumber(n);
+  else { anim($('flaps'), [{transform:'translateX(0)'},{transform:'translateX(-9px)'},{transform:'translateX(9px)'},{transform:'translateX(-6px)'},{transform:'translateX(0)'}], {duration:400}); setTimeout(showBuf, 450); }
 }
 function key(k){
   const b = document.querySelector(`#keys [data-k="${k}"]`);
@@ -549,10 +664,11 @@ function key(k){
 $('keys').onclick = e => { const b = e.target.closest('button[data-k]'); if (b) key(b.dataset.k); };
 addEventListener('keydown', e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (sheet.classList.contains('on')) { if (e.key === 'Escape') openSheet(false); return; }
+  if (openEl) { if (e.key === 'Escape') openSheet(false); return; }
   if ($('scan').classList.contains('on')) { if (e.key === 'Escape') stopScan(); return; }
   if (/^[0-9]$/.test(e.key)) { if (mode !== 'nummer') setMode('nummer'); key(e.key); e.preventDefault(); }
   else if (e.key === 'Backspace') { key('back'); e.preventDefault(); }
+  else if (e.key === 't' || e.key === 'T') { randomCard(document.querySelector(`#view-${mode} [data-random]`)); e.preventDefault(); }
   else if (e.key === 'Enter') { if (document.activeElement && document.activeElement.closest('#modes,.gear')) return; key('go'); e.preventDefault(); }
   else if (e.key === ' ' && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) { togglePlay(); e.preventDefault(); }
 });
